@@ -237,14 +237,12 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const fbAuth = firebase.auth();
-const googleProvider = new firebase.auth.GoogleAuthProvider();
 
 const authNavArea = document.getElementById("authNavArea");
 const authModal = document.getElementById("authModal");
 const closeAuthModalBtn = document.getElementById("closeAuthModal");
 const authNotice = document.getElementById("authNotice");
 const authTabs = document.querySelectorAll(".auth-tab");
-const googleSignInBtn = document.getElementById("googleSignInBtn");
 const loginForm = document.getElementById("loginForm");
 const registerForm = document.getElementById("registerForm");
 const loginError = document.getElementById("loginError");
@@ -358,19 +356,6 @@ authTabs.forEach((tab) => {
 closeAuthModalBtn.addEventListener("click", closeAuthModal);
 authModal.addEventListener("click", (e) => {
   if (e.target === authModal) closeAuthModal();
-});
-
-// Google (Gmail) Sign-In
-googleSignInBtn.addEventListener("click", async () => {
-  loginError.textContent = "";
-  registerError.textContent = "";
-  try {
-    await fbAuth.signInWithPopup(googleProvider);
-    handleAuthSuccess();
-  } catch (err) {
-    loginError.textContent = mapFirebaseError(err);
-    registerError.textContent = mapFirebaseError(err);
-  }
 });
 
 // Email Sign-In
