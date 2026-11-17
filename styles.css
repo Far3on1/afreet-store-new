@@ -745,44 +745,66 @@ select {
   flex-direction: column;
   justify-content: space-between;
   padding: 22px;
-  border-radius: var(--radius-md);
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
+  border-radius: 18px;
+  background: linear-gradient(160deg, rgba(20, 24, 38, 0.9), rgba(11, 13, 22, 0.96));
+  border: 1px solid transparent;
   box-shadow: var(--shadow-card);
   transition: var(--transition);
   overflow: hidden;
+  z-index: 1;
 }
 
 .price-card::before {
   content: "";
   position: absolute;
-  inset: 0 0 auto 0;
-  height: 3px;
-  background: var(--grad-diamond);
-  opacity: 0.75;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: linear-gradient(135deg, rgba(0, 229, 255, 0.75), rgba(0, 136, 255, 0.18) 55%, rgba(0, 229, 255, 0.55));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: -1;
+  transition: var(--transition);
 }
 
 .price-card.pkg-card::before {
-  background: var(--grad-gold);
+  background: linear-gradient(135deg, rgba(255, 209, 102, 0.75), rgba(245, 158, 11, 0.18) 55%, rgba(255, 209, 102, 0.55));
 }
 
 .price-card.bulk-card::before {
-  background: var(--grad-afreet);
+  background: linear-gradient(135deg, rgba(255, 59, 48, 0.8), rgba(255, 107, 26, 0.2) 55%, rgba(255, 184, 0, 0.6));
 }
 
 .price-card.id-card::before {
-  background: linear-gradient(135deg, #10b981 0%, #00e5ff 100%);
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.8), rgba(0, 229, 255, 0.2) 55%, rgba(52, 211, 153, 0.6));
 }
 
 .price-card:hover {
   transform: translateY(-5px);
-  background: var(--bg-card-hover);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: linear-gradient(160deg, rgba(28, 33, 52, 0.95), rgba(14, 17, 29, 0.98));
+  box-shadow: 0 16px 36px -10px rgba(0, 229, 255, 0.28);
+}
+
+.price-card.pkg-card:hover {
+  box-shadow: 0 16px 36px -10px rgba(245, 176, 65, 0.28);
+}
+
+.price-card.bulk-card:hover {
+  box-shadow: 0 16px 36px -10px rgba(255, 75, 43, 0.32);
+}
+
+.price-card.id-card:hover {
+  box-shadow: 0 16px 36px -10px rgba(16, 185, 129, 0.3);
 }
 
 .price-card.popular {
-  border-color: rgba(255, 107, 26, 0.55);
-  box-shadow: 0 16px 40px -12px rgba(255, 75, 43, 0.28);
+  box-shadow: 0 16px 40px -12px rgba(255, 107, 26, 0.28);
+}
+
+.price-card.popular::before {
+  padding: 1.8px;
 }
 
 .card-ribbon {
