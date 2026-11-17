@@ -664,18 +664,41 @@ copyOrderBtn.addEventListener("click", async () => {
 const navBackdrop = document.getElementById("navBackdrop");
 const closeDrawerBtn = document.getElementById("closeDrawerBtn");
 
+function openMobileDrawer() {
+  navLinks.classList.add("open");
+  navBackdrop.classList.add("open");
+  document.documentElement.classList.add("drawer-open");
+  document.body.classList.add("drawer-open");
+}
+
 function closeMobileDrawer() {
   navLinks.classList.remove("open");
   navBackdrop.classList.remove("open");
+  document.documentElement.classList.remove("drawer-open");
+  document.body.classList.remove("drawer-open");
 }
 
-mobileToggle.addEventListener("click", () => {
-  navLinks.classList.toggle("open");
-  navBackdrop.classList.toggle("open");
+mobileToggle.addEventListener("click", (e) => {
+  e.stopPropagation();
+  if (navLinks.classList.contains("open")) {
+    closeMobileDrawer();
+  } else {
+    openMobileDrawer();
+  }
 });
 
 navBackdrop.addEventListener("click", closeMobileDrawer);
 closeDrawerBtn.addEventListener("click", closeMobileDrawer);
+
+document.addEventListener("click", (e) => {
+  if (
+    navLinks.classList.contains("open") &&
+    !navLinks.contains(e.target) &&
+    !mobileToggle.contains(e.target)
+  ) {
+    closeMobileDrawer();
+  }
+});
 
 document.querySelectorAll(".nav-link").forEach((link) => {
   link.addEventListener("click", closeMobileDrawer);
