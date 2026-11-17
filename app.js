@@ -319,17 +319,25 @@ function renderAuthNav() {
   }
 }
 
+function syncModalScrollLock() {
+  const hasOpenModal = Boolean(document.querySelector(".modal-backdrop.open"));
+  document.documentElement.classList.toggle("modal-open", hasOpenModal);
+  document.body.classList.toggle("modal-open", hasOpenModal);
+}
+
 function openAuthModal(requireOrderNotice = false) {
   loginError.textContent = "";
   registerError.textContent = "";
   authNotice.style.display = requireOrderNotice ? "block" : "none";
   authModal.classList.add("open");
   authModal.setAttribute("aria-hidden", "false");
+  syncModalScrollLock();
 }
 
 function closeAuthModal() {
   authModal.classList.remove("open");
   authModal.setAttribute("aria-hidden", "true");
+  syncModalScrollLock();
 }
 
 function handleAuthSuccess() {
@@ -445,11 +453,13 @@ function openProfileModal() {
 
   profileModal.classList.add("open");
   profileModal.setAttribute("aria-hidden", "false");
+  syncModalScrollLock();
 }
 
 function closeProfileModal() {
   profileModal.classList.remove("open");
   profileModal.setAttribute("aria-hidden", "true");
+  syncModalScrollLock();
 }
 
 closeProfileModalBtn.addEventListener("click", closeProfileModal);
@@ -570,6 +580,7 @@ function openOrderModal(itemId) {
   toastMsg.textContent = "";
   orderModal.classList.add("open");
   orderModal.setAttribute("aria-hidden", "false");
+  syncModalScrollLock();
 }
 
 function updateModalSummary(item) {
@@ -581,6 +592,7 @@ function updateModalSummary(item) {
 function closeOrderModal() {
   orderModal.classList.remove("open");
   orderModal.setAttribute("aria-hidden", "true");
+  syncModalScrollLock();
 }
 
 function buildOrderMessage() {

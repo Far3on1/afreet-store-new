@@ -1104,15 +1104,25 @@ select {
 }
 
 /* Modal */
+html.modal-open,
+body.modal-open {
+  overflow: hidden;
+  height: 100%;
+  touch-action: none;
+}
+
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 200;
+  z-index: 300;
   background: rgba(4, 5, 10, 0.78);
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   display: none;
   place-items: center;
   padding: 18px;
+  overscroll-behavior: contain;
+  touch-action: none;
 }
 
 .modal-backdrop.open {
@@ -1121,6 +1131,10 @@ select {
 
 .modal-box {
   width: min(490px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
   background: #111420;
   border: 1px solid rgba(255, 107, 26, 0.35);
   border-radius: var(--radius-lg);
