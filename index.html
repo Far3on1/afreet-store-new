@@ -438,6 +438,64 @@
     </div>
   </div>
 
+  <!-- User Profile Modal -->
+  <div class="modal-backdrop" id="profileModal" aria-hidden="true">
+    <div class="modal-box profile-modal-box" role="dialog" aria-modal="true" aria-labelledby="profileModalTitle">
+      <button class="modal-close" id="closeProfileModal" aria-label="إغلاق">✕</button>
+
+      <div class="profile-hero">
+        <div class="profile-avatar-wrap">
+          <img id="profileAvatarImg" src="assets/afreet-logo.jpg" alt="صورة الحساب" />
+          <label for="avatarUpload" class="avatar-upload-btn" title="تغيير الصورة">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          </label>
+          <input type="file" id="avatarUpload" accept="image/*" hidden />
+        </div>
+        <h3 id="profileModalTitle" class="profile-name-title">—</h3>
+        <p id="profileEmailText" class="profile-email-text">—</p>
+        <span id="profileProviderBadge" class="profile-provider-badge">حساب عفريت</span>
+      </div>
+
+      <div class="auth-tabs">
+        <button type="button" class="auth-tab profile-tab active" data-profile-tab="info">البيانات الشخصية</button>
+        <button type="button" class="auth-tab profile-tab" data-profile-tab="security">تغيير كلمة المرور</button>
+      </div>
+
+      <!-- Profile Info Form -->
+      <form id="profileInfoForm" class="order-form">
+        <div class="form-group">
+          <label for="profName">الاسم</label>
+          <input type="text" id="profName" required placeholder="أدخل اسمك..." />
+        </div>
+        <div class="form-group">
+          <label for="profPhone">رقم الموبايل (واتساب)</label>
+          <input type="tel" id="profPhone" placeholder="01xxxxxxxxx" />
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg full-width">حفظ التعديلات</button>
+        <p class="toast-msg" id="profileInfoMsg"></p>
+      </form>
+
+      <!-- Profile Security / Password Form -->
+      <form id="profilePasswordForm" class="order-form" style="display:none;">
+        <p class="profile-google-note" id="googlePassNote" style="display:none;">
+          ℹ️ أنت مسجل الدخول بحساب جوجل (Gmail)، يتم إدارة كلمة المرور من خلال حساب جوجل الخاص بك.
+        </p>
+        <div id="passwordFieldsWrap">
+          <div class="form-group">
+            <label for="profNewPass">كلمة المرور الجديدة</label>
+            <input type="password" id="profNewPass" required minlength="6" placeholder="6 أحرف أو أرقام على الأقل" />
+          </div>
+          <div class="form-group" style="margin-top: 12px;">
+            <label for="profConfirmPass">تأكيد كلمة المرور الجديدة</label>
+            <input type="password" id="profConfirmPass" required minlength="6" placeholder="أعد كتابة كلمة المرور" />
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg full-width" style="margin-top: 14px;">تحديث كلمة المرور</button>
+        </div>
+        <p class="toast-msg" id="profilePassMsg"></p>
+      </form>
+    </div>
+  </div>
+
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
   <script src="app.js"></script>

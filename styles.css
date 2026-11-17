@@ -1352,6 +1352,120 @@ select {
   background: var(--border-subtle);
 }
 
+/* Profile Modal & Navbar Avatar */
+.user-pill {
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.user-pill:hover {
+  border-color: rgba(255, 107, 26, 0.55);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.user-pill-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  padding: 0;
+  font-weight: 700;
+}
+
+.user-pill-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid var(--afreet-orange);
+}
+
+.profile-modal-box {
+  width: min(460px, 100%);
+}
+
+.profile-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-bottom: 18px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.profile-avatar-wrap {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  margin-bottom: 12px;
+}
+
+.profile-avatar-wrap img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2.5px solid var(--afreet-orange);
+  box-shadow: 0 0 24px rgba(255, 75, 43, 0.35);
+}
+
+.avatar-upload-btn {
+  position: absolute;
+  bottom: 2px;
+  left: 2px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--grad-afreet);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  border: 2px solid #111420;
+  transition: var(--transition);
+}
+
+.avatar-upload-btn:hover {
+  transform: scale(1.1);
+}
+
+.profile-name-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.profile-email-text {
+  font-size: 0.86rem;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.profile-provider-badge {
+  font-size: 0.74rem;
+  font-weight: 800;
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: rgba(0, 229, 255, 0.12);
+  color: var(--diamond-cyan);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+}
+
+.profile-google-note {
+  font-size: 0.86rem;
+  color: #ffd166;
+  background: rgba(245, 176, 65, 0.12);
+  border: 1px solid rgba(245, 176, 65, 0.3);
+  padding: 12px;
+  border-radius: 10px;
+  text-align: center;
+  line-height: 1.6;
+}
+
 /* Responsive */
 @media (max-width: 900px) {
   .hero-grid {

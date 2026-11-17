@@ -270,13 +270,20 @@ function getSavedPhone(uid) {
   return localStorage.getItem(`afreet_phone_${uid}`) || "";
 }
 
+function getSavedAvatar(uid, fallbackUrl) {
+  return localStorage.getItem(`afreet_avatar_${uid}`) || fallbackUrl || "assets/afreet-logo.jpg";
+}
+
 fbAuth.onAuthStateChanged((user) => {
   if (user) {
+    const isGoogle = user.providerData?.some((p) => p.providerId === "google.com");
     currentUser = {
       uid: user.uid,
       name: user.displayName || (user.email ? user.email.split("@")[0] : "عميل عفريت"),
       email: user.email || "",
       phone: getSavedPhone(user.uid),
+      avatar: getSavedAvatar(user.uid, user.photoURL),
+      isGoogle,
     };
   } else {
     currentUser = null;
@@ -288,10 +295,14 @@ function renderAuthNav() {
   if (currentUser) {
     authNavArea.innerHTML = `
       <div class="user-pill">
-        <span class="user-pill-name">👤 ${currentUser.name}</span>
+        <button type="button" class="user-pill-trigger" id="openProfileBtn" title="فتح الملف الشخصي">
+          <img class="user-pill-avatar" src="${currentUser.avatar}" alt="${currentUser.name}" />
+          <span class="user-pill-name">${currentUser.name}</span>
+        </button>
         <button type="button" class="logout-btn" id="logoutBtn">خروج</button>
       </div>
     `;
+    document.getElementById("openProfileBtn").addEventListener("click", openProfileModal);
     document.getElementById("logoutBtn").addEventListener("click", async () => {
       await fbAuth.signOut();
     });
@@ -386,11 +397,172 @@ registerForm.addEventListener("submit", async (e) => {
     if (phone) {
       localStorage.setItem(`afreet_phone_${cred.user.uid}`, phone);
     }
-    currentUser = { uid: cred.user.uid, name, email, phone };
+    currentUser = {
+      uid: cred.user.uid,
+      name,
+      email,
+      phone,
+      avatar: "assets/afreet-logo.jpg",
+      isGoogle: false,
+    };
     renderAuthNav();
     handleAuthSuccess();
   } catch (err) {
     registerError.textContent = mapFirebaseError(err);
+  }
+});
+
+// ==========================================
+// الملف الشخصي (Profile Modal)
+// ==========================================
+const profileModal = document.getElementById("profileModal");
+const closeProfileModalBtn = document.getElementById("closeProfileModal");
+const profileAvatarImg = document.getElementById("profileAvatarImg");
+const avatarUpload = document.getElementById("avatarUpload");
+const profileModalTitle = document.getElementById("profileModalTitle");
+const profileEmailText = document.getElementById("profileEmailText");
+const profileProviderBadge = document.getElementById("profileProviderBadge");
+const profileTabs = document.querySelectorAll(".profile-tab");
+const profileInfoForm = document.getElementById("profileInfoForm");
+const profilePasswordForm = document.getElementById("profilePasswordForm");
+const profileInfoMsg = document.getElementById("profileInfoMsg");
+const profilePassMsg = document.getElementById("profilePassMsg");
+const googlePassNote = document.getElementById("googlePassNote");
+const passwordFieldsWrap = document.getElementById("passwordFieldsWrap");
+
+function openProfileModal() {
+  if (!currentUser) return;
+  profileAvatarImg.src = currentUser.avatar;
+  profileModalTitle.textContent = currentUser.name;
+  profileEmailText.textContent = currentUser.email || "حساب عفريت";
+  profileProviderBadge.textContent = currentUser.isGoogle ? "مسجل بحساب جوجل (Gmail)" : "مسجل بالإيميل";
+
+  document.getElementById("profName").value = currentUser.name;
+  document.getElementById("profPhone").value = currentUser.phone || "";
+  profileInfoMsg.textContent = "";
+  profilePassMsg.textContent = "";
+  document.getElementById("profNewPass").value = "";
+  document.getElementById("profConfirmPass").value = "";
+
+  if (currentUser.isGoogle) {
+    googlePassNote.style.display = "block";
+    passwordFieldsWrap.style.display = "none";
+  } else {
+    googlePassNote.style.display = "none";
+    passwordFieldsWrap.style.display = "block";
+  }
+
+  profileModal.classList.add("open");
+  profileModal.setAttribute("aria-hidden", "false");
+}
+
+function closeProfileModal() {
+  profileModal.classList.remove("open");
+  profileModal.setAttribute("aria-hidden", "true");
+}
+
+closeProfileModalBtn.addEventListener("click", closeProfileModal);
+profileModal.addEventListener("click", (e) => {
+  if (e.target === profileModal) closeProfileModal();
+});
+
+profileTabs.forEach((tab) => {
+  tab.addEventListener("click", () => {
+    profileTabs.forEach((t) => t.classList.remove("active"));
+    tab.classList.add("active");
+    const target = tab.dataset.profileTab;
+    profileInfoForm.style.display = target === "info" ? "flex" : "none";
+    profilePasswordForm.style.display = target === "security" ? "flex" : "none";
+    profileInfoMsg.textContent = "";
+    profilePassMsg.textContent = "";
+  });
+});
+
+// Upload & Resize Avatar Image
+avatarUpload.addEventListener("change", (e) => {
+  const file = e.target.files?.[0];
+  if (!file || !currentUser) return;
+
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    const img = new Image();
+    img.onload = () => {
+      const size = 256;
+      const canvas = document.createElement("canvas");
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext("2d");
+
+      const minSide = Math.min(img.width, img.height);
+      const sx = (img.width - minSide) / 2;
+      const sy = (img.height - minSide) / 2;
+      ctx.drawImage(img, sx, sy, minSide, minSide, 0, 0, size, size);
+
+      const dataUrl = canvas.toDataURL("image/jpeg", 0.85);
+      localStorage.setItem(`afreet_avatar_${currentUser.uid}`, dataUrl);
+      currentUser.avatar = dataUrl;
+      profileAvatarImg.src = dataUrl;
+      renderAuthNav();
+      profileInfoMsg.style.color = "#4ade80";
+      profileInfoMsg.textContent = "✅ تم تحديث صورة الحساب!";
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+});
+
+// Save Profile Info (Name & Phone)
+profileInfoForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  if (!currentUser || !fbAuth.currentUser) return;
+  const newName = document.getElementById("profName").value.trim();
+  const newPhone = document.getElementById("profPhone").value.trim();
+
+  try {
+    await fbAuth.currentUser.updateProfile({ displayName: newName });
+    if (newPhone) {
+      localStorage.setItem(`afreet_phone_${currentUser.uid}`, newPhone);
+    } else {
+      localStorage.removeItem(`afreet_phone_${currentUser.uid}`);
+    }
+    currentUser.name = newName;
+    currentUser.phone = newPhone;
+    profileModalTitle.textContent = newName;
+    renderAuthNav();
+    profileInfoMsg.style.color = "#4ade80";
+    profileInfoMsg.textContent = "✅ تم حفظ بياناتك بنجاح!";
+  } catch (err) {
+    profileInfoMsg.style.color = "#ff6b6b";
+    profileInfoMsg.textContent = mapFirebaseError(err);
+  }
+});
+
+// Change Password
+profilePasswordForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  if (!currentUser || !fbAuth.currentUser) return;
+  const newPass = document.getElementById("profNewPass").value;
+  const confirmPass = document.getElementById("profConfirmPass").value;
+
+  if (newPass !== confirmPass) {
+    profilePassMsg.style.color = "#ff6b6b";
+    profilePassMsg.textContent = "❌ كلمتا المرور غير متطابقتين";
+    return;
+  }
+
+  try {
+    await fbAuth.currentUser.updatePassword(newPass);
+    document.getElementById("profNewPass").value = "";
+    document.getElementById("profConfirmPass").value = "";
+    profilePassMsg.style.color = "#4ade80";
+    profilePassMsg.textContent = "✅ تم تغيير كلمة المرور بنجاح!";
+  } catch (err) {
+    profilePassMsg.style.color = "#ff6b6b";
+    if (err?.code === "auth/requires-recent-login") {
+      profilePassMsg.textContent = "❌ لأمان حسابك، يرجى تسجيل الخروج والدخول مرة أخرى ثم إعادة المحاولة";
+    } else {
+      profilePassMsg.textContent = mapFirebaseError(err);
+    }
   }
 });
 
