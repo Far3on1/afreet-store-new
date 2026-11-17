@@ -661,12 +661,24 @@ copyOrderBtn.addEventListener("click", async () => {
   }
 });
 
+const navBackdrop = document.getElementById("navBackdrop");
+const closeDrawerBtn = document.getElementById("closeDrawerBtn");
+
+function closeMobileDrawer() {
+  navLinks.classList.remove("open");
+  navBackdrop.classList.remove("open");
+}
+
 mobileToggle.addEventListener("click", () => {
   navLinks.classList.toggle("open");
+  navBackdrop.classList.toggle("open");
 });
 
+navBackdrop.addEventListener("click", closeMobileDrawer);
+closeDrawerBtn.addEventListener("click", closeMobileDrawer);
+
 document.querySelectorAll(".nav-link").forEach((link) => {
-  link.addEventListener("click", () => navLinks.classList.remove("open"));
+  link.addEventListener("click", closeMobileDrawer);
 });
 
 // Init
