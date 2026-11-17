@@ -1562,6 +1562,7 @@ select {
   }
 
   body.drawer-open .navbar {
+    z-index: 250;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
@@ -1570,7 +1571,7 @@ select {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(4, 5, 10, 0.42);
+    background: transparent;
     touch-action: none;
     z-index: 240;
   }
