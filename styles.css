@@ -1506,10 +1506,52 @@ select {
 }
 
 @media (max-width: 720px) {
+  .nav-container {
+    height: 66px;
+    gap: 8px;
+  }
+
+  .brand-logo {
+    width: 38px;
+    height: 38px;
+  }
+
+  .brand-name {
+    font-size: 1.2rem;
+  }
+
+  .brand-tag {
+    font-size: 0.56rem;
+    letter-spacing: 1.2px;
+  }
+
+  .user-pill {
+    gap: 6px;
+    padding: 4px 8px;
+    font-size: 0.78rem;
+  }
+
+  .user-pill-avatar {
+    width: 24px;
+    height: 24px;
+  }
+
+  .user-pill-name {
+    max-width: 85px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .logout-btn {
+    padding: 2px 8px;
+    font-size: 0.7rem;
+  }
+
   .nav-links {
     display: none;
     position: absolute;
-    top: 76px;
+    top: 66px;
     right: 0;
     left: 0;
     flex-direction: column;
@@ -1526,8 +1568,144 @@ select {
     display: flex;
   }
 
+  .hero {
+    padding: 36px 0 32px;
+  }
+
   .hero-stats {
     flex-wrap: wrap;
     justify-content: center;
+    padding: 14px 16px;
+    gap: 14px;
+  }
+
+  .games-section,
+  .pricing-section,
+  .howto-section,
+  .support-section {
+    padding: 36px 0;
+  }
+
+  .section-head {
+    margin-bottom: 20px;
+    gap: 12px;
+  }
+
+  /* 2-column grid for Games on Mobile */
+  .games-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .game-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 26px 10px 14px;
+    gap: 8px;
+  }
+
+  .game-badge {
+    top: 8px;
+    left: 8px;
+    font-size: 0.65rem;
+    padding: 2px 7px;
+  }
+
+  .game-icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .game-meta h3 {
+    font-size: 0.88rem;
+  }
+
+  .game-meta p {
+    font-size: 0.72rem;
+  }
+
+  .game-arrow {
+    display: none;
+  }
+
+  /* 2-column side-by-side grid for Pricing Cards on Mobile */
+  .cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .price-card {
+    padding: 14px 11px;
+    border-radius: 14px;
+  }
+
+  .card-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+
+  .card-ribbon {
+    font-size: 0.64rem;
+    padding: 2px 8px;
+  }
+
+  .card-title {
+    font-size: 0.96rem;
+    line-height: 1.3;
+  }
+
+  .card-sub {
+    font-size: 0.72rem;
+  }
+
+  .card-price-row {
+    padding: 8px 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .price-amount {
+    font-size: 1.28rem;
+  }
+
+  .price-currency {
+    font-size: 0.76rem;
+  }
+
+  .price-tag {
+    font-size: 0.68rem;
+  }
+
+  .card-btn {
+    padding: 8px;
+    font-size: 0.84rem;
+    border-radius: 8px;
+  }
+
+  .filter-tabs {
+    gap: 6px;
+  }
+
+  .tab-btn {
+    padding: 7px 11px;
+    font-size: 0.78rem;
+  }
+
+  .steps-grid,
+  .support-grid {
+    gap: 12px;
+  }
+
+  .step-card,
+  .support-card {
+    padding: 18px 16px;
+  }
+
+  .modal-box {
+    padding: 22px 16px;
   }
 }
