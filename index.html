@@ -451,7 +451,15 @@
           </label>
           <input type="file" id="avatarUpload" accept="image/*" hidden />
         </div>
-        <h3 id="profileModalTitle" class="profile-name-title">—</h3>
+        <h3 class="profile-name-row">
+          <span id="profileModalTitle" class="profile-name-title">—</span>
+          <span class="verified-badge" title="حساب موثق">
+            <svg viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="10" fill="#0095F6"/>
+              <path d="M8.5 12.5L10.8 14.8L15.8 9.8" stroke="#FFFFFF" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </h3>
         <p id="profileEmailText" class="profile-email-text">—</p>
         <span id="profileProviderBadge" class="profile-provider-badge">حساب عفريت</span>
       </div>

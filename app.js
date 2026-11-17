@@ -298,6 +298,12 @@ function renderAuthNav() {
         <button type="button" class="user-pill-trigger" id="openProfileBtn" title="فتح الملف الشخصي">
           <img class="user-pill-avatar" src="${currentUser.avatar}" alt="${currentUser.name}" />
           <span class="user-pill-name">${currentUser.name}</span>
+          <span class="verified-badge" title="حساب موثق">
+            <svg viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="10" fill="#0095F6"/>
+              <path d="M8.5 12.5L10.8 14.8L15.8 9.8" stroke="#FFFFFF" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
         </button>
         <button type="button" class="logout-btn" id="logoutBtn">خروج</button>
       </div>

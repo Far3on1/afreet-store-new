@@ -1466,6 +1466,28 @@ select {
   line-height: 1.6;
 }
 
+.profile-name-row {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.verified-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 6px rgba(0, 149, 246, 0.55));
+}
+
+.verified-badge svg {
+  width: 100%;
+  height: 100%;
+}
+
 /* Responsive */
 @media (max-width: 900px) {
   .hero-grid {
