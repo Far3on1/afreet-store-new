@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>عفريت ستور | Afreet Store - شحن الألعاب بأفضل الأسعار</title>
+  <meta name="description" content="موقع عفريت الرسمي لأسعار شحن الألعاب - شحن جواهر فري فاير، العضويات الشهرية والأسبوعية، الدروبات، وباقات الجملة بأفضل الأسعار في مصر." />
+  <link rel="icon" type="image/jpeg" href="assets/afreet-logo.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Changa:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Ambient Background Glows -->
+  <div class="bg-ambient" aria-hidden="true">
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+    <div class="glow glow-3"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <!-- Navbar -->
+  <header class="navbar" id="navbar">
+    <div class="container nav-container">
+      <a href="#hero" class="brand">
+        <div class="brand-logo">
+          <img src="assets/afreet-logo.jpg" alt="لوجو عفريت ستور" />
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">عفريت</span>
+          <span class="brand-tag">AFREET STORE</span>
+        </div>
+      </a>
+
+      <nav class="nav-links" id="navLinks">
+        <a href="#games" class="nav-link">الألعاب</a>
+        <a href="#diamonds" class="nav-link">شحن بالأكونت</a>
+        <a href="#id-offers" class="nav-link">شحن بالـ ID</a>
+        <a href="#packages" class="nav-link">الباقات والعضويات</a>
+        <a href="#how-to" class="nav-link">طريقة الشحن</a>
+        <a href="#support" class="nav-link">تواصل والشكاوى</a>
+      </nav>
+
+      <div class="nav-actions">
+        <div id="authNavArea">
+          <button class="btn btn-primary btn-sm" id="openAuthBtn">تسجيل الدخول</button>
+        </div>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="القائمة">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero" id="hero">
+    <div class="container hero-grid">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="pulse-dot"></span>
+          <span>الخدمة متاحة الآن — شحن VIP مضمون</span>
+        </div>
+        <h1 class="hero-title">
+          عالم شحن الألعاب مع <span class="text-gradient">عفريت</span>
+          <br />سرعة، أمان، وأقوى عروض
+        </h1>
+        <p class="hero-subtitle">
+          وجهتك الموثوقة لشحن جميع ألعابك المفضلة بأفضل الأسعار، تنفيذ لحظي، وخدمة عملاء تتابع طلبك خطوة بخطوة.
+        </p>
+
+        <div class="hero-cta">
+          <a href="#diamonds" class="btn btn-primary btn-lg">
+            <span>تصفح أسعار فري فاير</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+          </a>
+          <a href="#packages" class="btn btn-glass btn-lg">
+            <span>العضويات والباقات</span>
+          </a>
+        </div>
+
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-value">تنفيذ لحظي</span>
+            <span class="stat-label">أسرع خدمة شحن</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <span class="stat-value">أقوى عروض</span>
+            <span class="stat-label">خصومات على كل الباقات</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <span class="stat-value">خدمة VIP</span>
+            <span class="stat-label">متابعة لحد ما تستلم</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="hero-card-showcase">
+          <div class="showcase-header">
+            <span class="game-pill active">FREE FIRE</span>
+            <span class="status-pill">أفضل سعر</span>
+          </div>
+          <div class="showcase-banner">
+            <img src="assets/freefire-banner.jpg" alt="فري فاير - Free Fire" />
+          </div>
+          <div class="showcase-info">
+            <h3>شحن فري فاير بالأكونت</h3>
+            <p>تبدأ الأسعار من <strong>50 ج.م</strong> فقط — وخصومات خاصة لباقات الجملة</p>
+          </div>
+          <div class="showcase-mini-prices">
+            <div class="mini-chip"><span>100 💎</span><strong>50 ج</strong></div>
+            <div class="mini-chip"><span>520 💎</span><strong>210 ج</strong></div>
+            <div class="mini-chip"><span>1060 💎</span><strong>370 ج</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Games Strip -->
+  <section class="games-section" id="games">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="section-kicker">الألعاب المدعومة</span>
+          <h2 class="section-title">اختر لعبتك</h2>
+        </div>
+        <p class="section-desc">اختار لعبتك وعيش الجو.. الشحن علينا والأسعار عندنا تحدي!</p>
+      </div>
+
+      <div class="games-grid">
+        <a href="#diamonds" class="game-card game-active">
+          <div class="game-badge live">متاح الآن</div>
+          <div class="game-icon ff-thumb">
+            <img src="assets/freefire-banner.jpg" alt="فري فاير" />
+          </div>
+          <div class="game-meta">
+            <h3>فري فاير (Free Fire)</h3>
+            <p>جواهر أكونت • عضويات • دروبات</p>
+          </div>
+          <span class="game-arrow">←</span>
+        </a>
+
+        <div class="game-card game-soon">
+          <div class="game-badge soon">قريباً</div>
+          <div class="game-icon pubg-icon">BG</div>
+          <div class="game-meta">
+            <h3>ببجي موبايل (PUBG)</h3>
+            <p>شدات UC — قريباً في متجر عفريت</p>
+          </div>
+        </div>
+
+        <div class="game-card game-soon">
+          <div class="game-badge soon">قريباً</div>
+          <div class="game-icon val-icon">VL</div>
+          <div class="game-meta">
+            <h3>فالورانت (Valorant)</h3>
+            <p>نقاط VP — قريباً في متجر عفريت</p>
+          </div>
+        </div>
+
+        <div class="game-card game-soon">
+          <div class="game-badge soon">قريباً</div>
+          <div class="game-icon fc-icon">FC</div>
+          <div class="game-meta">
+            <h3>FC Mobile</h3>
+            <p>نقاط FC — قريباً في متجر عفريت</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Free Fire Account Diamonds Section -->
+  <section class="pricing-section" id="diamonds">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="section-kicker diamond-kicker">شحن مباشر بالأكونت</span>
+          <h2 class="section-title">أسعار جواهر فري فاير <span class="title-accent">(أكونت)</span></h2>
+        </div>
+        <div class="search-box">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input type="text" id="priceSearch" placeholder="ابحث عن كمية أو باقة (مثال: 520 أو شهرية)..." />
+        </div>
+      </div>
+
+      <div class="cards-grid diamonds-grid" id="diamondsGrid">
+        <!-- Populated by app.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Free Fire ID Offers Section -->
+  <section class="pricing-section id-offers-section" id="id-offers">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="section-kicker id-kicker">شحن فوري بالـ ID فقط — بدون بيانات حساب</span>
+          <h2 class="section-title">عروض فري فاير <span class="title-accent id-accent">(ايدي ID)</span></h2>
+        </div>
+        <p class="section-desc">اشحن بالـ ID الخاص بك فقط بسرعة وأمان تام</p>
+      </div>
+
+      <div class="cards-grid id-offers-grid" id="idOffersGrid">
+        <!-- Populated by app.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Packages, Memberships & Drops Section -->
+  <section class="pricing-section packages-section" id="packages">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="section-kicker gold-kicker">عروض حصرية وباقات توفير</span>
+          <h2 class="section-title">الباقات والعضويات <span class="title-accent gold">والدروبات</span></h2>
+        </div>
+
+        <div class="filter-tabs" id="packageTabs">
+          <button class="tab-btn active" data-filter="all">الكل (15)</button>
+          <button class="tab-btn" data-filter="membership">العضويات الفردية</button>
+          <button class="tab-btn" data-filter="drop">الدروبات</button>
+          <button class="tab-btn" data-filter="weekly-bulk">باقات أسبوعية (جملة)</button>
+          <button class="tab-btn" data-filter="monthly-bulk">باقات شهرية (جملة)</button>
+        </div>
+      </div>
+
+      <div class="cards-grid packages-grid" id="packagesGrid">
+        <!-- Populated by app.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- How it Works / Trust Section -->
+  <section class="howto-section" id="how-to">
+    <div class="container">
+      <div class="section-head center-head">
+        <span class="section-kicker">خطوات بسيطة وسريعة</span>
+        <h2 class="section-title">كيف تشحن من متجر <span class="text-gradient">عفريت</span>؟</h2>
+      </div>
+
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-num">01</div>
+          <h3>اختر الباقة المناسبة</h3>
+          <p>تصفح قائمة جواهر فري فاير أو العضويات والدروبات واضغط على "اطلب الآن" للباقة التي تريدها.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">02</div>
+          <h3>أدخل بيانات الطلب</h3>
+          <p>اكتب اسمك أو رقم حسابك واختر وسيلة الدفع المناسبة لك (فودافون كاش، إنستاباي، إلخ).</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">03</div>
+          <h3>أرسل الطلب واستلم فوراً</h3>
+          <p>يتم تحويلك برسالة جاهزة لتأكيد الدفع، ويصلك الشحن في أسرع وقت وبأعلى درجة أمان.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact & Complaints Section -->
+  <section class="support-section" id="support">
+    <div class="container">
+      <div class="section-head center-head">
+        <span class="section-kicker">خدمة العملاء</span>
+        <h2 class="section-title">التواصل <span class="text-gradient">والشكاوى</span></h2>
+        <p class="section-desc">فريق عفريت متاح لخدمتك على مدار الساعة للطلبات أو لأي شكوى أو استفسار</p>
+      </div>
+
+      <div class="support-grid">
+        <div class="support-card orders-card">
+          <div class="support-icon">⚡</div>
+          <div class="support-info">
+            <span class="support-badge">الطلبات والشحن</span>
+            <h3>تواصل لشحن الألعاب</h3>
+            <p>لإرسال طلبات الشحن وتأكيد الدفع والاستفسار عن العروض.</p>
+            <div class="phone-display" dir="ltr">01158620386</div>
+          </div>
+          <div class="support-actions">
+            <a href="https://wa.me/201158620386" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-sm">واتساب الطلبات</a>
+          </div>
+        </div>
+
+        <div class="support-card complaints-card">
+          <div class="support-icon">🛡️</div>
+          <div class="support-info">
+            <span class="support-badge complaint-badge">الشكاوى والدعم</span>
+            <h3>قسم الشكاوى والمقترحات</h3>
+            <p>واجهت أي مشكلة أو تأخير؟ تواصل فوراً مع إدارة الشكاوى لحلها.</p>
+            <div class="phone-display" dir="ltr">01273778131</div>
+          </div>
+          <div class="support-actions">
+            <a href="https://wa.me/201273778131?text=%D8%A3%D9%87%D9%84%D8%A7%D9%8B%20%D9%82%D8%B3%D9%85%20%D8%A7%D9%84%D8%B4%D9%83%D8%A7%D9%88%D9%89%20%D9%81%D9%8A%20%D9%85%D8%AA%D8%AC%D8%B1%20%D8%B9%D9%81%D8%B1%D9%8A%D8%AA%D8%8C%20%D9%84%D8%AF%D9%8A%20%D8%B4%D9%83%D9%88%D9%89%20%D8%A8%D8%AE%D8%B5%D9%88%D8%B5%3A%20" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">واتساب الشكاوى</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <div class="brand-name-lg">عفريت ستور <span class="accent-dot">•</span> AFREET</div>
+        <p>متجرك الموثوق لشحن الألعاب والبطاقات الرقمية بأفضل الأسعار في مصر.</p>
+      </div>
+      <div class="footer-links">
+        <a href="#diamonds">شحن بالأكونت</a>
+        <a href="#id-offers">شحن بالـ ID</a>
+        <a href="#packages">الباقات والعضويات</a>
+        <a href="#how-to">طريقة الشحن</a>
+        <a href="#support">تواصل والشكاوى</a>
+      </div>
+      <div class="footer-copy">
+        © <span id="yearNow"></span> جميع الحقوق محفوظة لـ <strong>عفريت (Afreet Store)</strong>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Order Modal -->
+  <div class="modal-backdrop" id="orderModal" aria-hidden="true">
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="modal-close" id="closeModal" aria-label="إغلاق">✕</button>
+      <div class="modal-header">
+        <span class="modal-badge" id="modalCategory">شحن فري فاير</span>
+        <h3 id="modalTitle">تأكيد طلب الشحن</h3>
+      </div>
+
+      <div class="selected-summary">
+        <div>
+          <span class="summary-label">الباقة المختارة:</span>
+          <strong id="modalItemName">—</strong>
+        </div>
+        <div class="summary-price" id="modalItemPrice">—</div>
+      </div>
+
+      <form id="orderForm" class="order-form">
+        <div class="form-group">
+          <label for="packageSelect">تغيير الباقة (اختياري)</label>
+          <select id="packageSelect"></select>
+        </div>
+
+        <div class="form-group">
+          <label for="playerAccount">بيانات الأكونت / الـ ID</label>
+          <input type="text" id="playerAccount" required placeholder="أدخل ID اللاعب أو بيانات الحساب..." />
+        </div>
+
+        <div class="form-group">
+          <label for="paymentMethod">وسيلة الدفع المفضلة</label>
+          <select id="paymentMethod">
+            <option value="فودافون كاش">فودافون كاش (Vodafone Cash)</option>
+            <option value="إنستاباي">إنستاباي (InstaPay)</option>
+            <option value="أورنج كاش">أورنج كاش (Orange Cash)</option>
+            <option value="اتصالات كاش">اتصالات كاش (Etisalat Cash)</option>
+            <option value="أخرى">أخرى</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="orderNotes">ملاحظات إضافية (اختياري)</label>
+          <input type="text" id="orderNotes" placeholder="أي تفاصيل أخرى..." />
+        </div>
+
+        <div class="modal-actions">
+          <button type="submit" class="btn btn-whatsapp btn-lg full-width">
+            <span>إرسال الطلب عبر واتساب</span>
+          </button>
+          <button type="button" class="btn btn-glass btn-lg full-width" id="copyOrderBtn">
+            <span>نسخ تفاصيل الطلب</span>
+          </button>
+        </div>
+        <p class="toast-msg" id="toastMsg"></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Auth Modal (Login / Register) -->
+  <div class="modal-backdrop" id="authModal" aria-hidden="true">
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="authModalTitle">
+      <button class="modal-close" id="closeAuthModal" aria-label="إغلاق">✕</button>
+      <div class="modal-header">
+        <span class="modal-badge">حساب عفريت</span>
+        <h3 id="authModalTitle">تسجيل الدخول للمتابعة</h3>
+        <p class="auth-notice" id="authNotice" style="display:none;">🔒 يجب تسجيل الدخول أولاً لتتمكن من إرسال طلب الشحن</p>
+      </div>
+
+      <div class="auth-tabs">
+        <button type="button" class="auth-tab active" data-auth-tab="login">تسجيل الدخول</button>
+        <button type="button" class="auth-tab" data-auth-tab="register">إنشاء حساب جديد</button>
+      </div>
+
+      <!-- Google Sign-In -->
+      <button type="button" id="googleSignInBtn" class="btn-google">
+        <svg width="20" height="20" viewBox="0 0 24 24">
+          <path fill="#EA4335" d="M12 5c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 1.09 14.97 0 12 0 7.31 0 3.26 2.69 1.29 6.61l3.66 2.84C5.82 6.86 8.66 5 12 5z"/>
+          <path fill="#4285F4" d="M23.49 12.27c0-.79-.07-1.54-.19-2.27H12v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58l3.7 2.87c2.16-1.99 3.72-4.92 3.72-8.69z"/>
+          <path fill="#FBBC05" d="M4.95 14.55c-.22-.66-.35-1.36-.35-2.05s.13-1.39.35-2.05L1.29 7.61C.47 9.24 0 11.07 0 12.5s.47 3.26 1.29 4.89l3.66-2.84z"/>
+          <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.7-2.87c-1.08.72-2.45 1.16-4.23 1.16-3.34 0-6.18-1.86-7.05-4.45L1.29 17.77C3.26 21.31 7.31 24 12 24z"/>
+        </svg>
+        <span>المتابعة باستخدام جوجل (Gmail)</span>
+      </button>
+
+      <div class="auth-divider"><span>أو</span></div>
+
+      <!-- Login Form -->
+      <form id="loginForm" class="order-form">
+        <div class="form-group">
+          <label for="loginIdentifier">الإيميل (Email)</label>
+          <input type="email" id="loginIdentifier" required placeholder="example@gmail.com" />
+        </div>
+        <div class="form-group">
+          <label for="loginPassword">كلمة المرور</label>
+          <input type="password" id="loginPassword" required placeholder="••••••••" />
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg full-width">دخول</button>
+        <p class="auth-error" id="loginError"></p>
+      </form>
+
+      <!-- Register Form -->
+      <form id="registerForm" class="order-form" style="display:none;">
+        <div class="form-group">
+          <label for="regName">الاسم</label>
+          <input type="text" id="regName" required placeholder="أدخل اسمك..." />
+        </div>
+        <div class="form-group">
+          <label for="regEmail">الإيميل (Email)</label>
+          <input type="email" id="regEmail" required placeholder="example@gmail.com" />
+        </div>
+        <div class="form-group">
+          <label for="regPhone">رقم الموبايل (واتساب)</label>
+          <input type="tel" id="regPhone" required placeholder="01xxxxxxxxx" />
+        </div>
+        <div class="form-group">
+          <label for="regPassword">كلمة المرور</label>
+          <input type="password" id="regPassword" required minlength="4" placeholder="4 أحرف أو أرقام على الأقل" />
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg full-width">إنشاء حساب</button>
+        <p class="auth-error" id="registerError"></p>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
