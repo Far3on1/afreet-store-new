@@ -716,6 +716,63 @@ document.querySelectorAll(".nav-link").forEach((link) => {
   link.addEventListener("click", closeMobileDrawer);
 });
 
+// ==========================================
+// صوت "صلِّ على محمد" عند دخول الموقع
+// ==========================================
+const salatBtn = document.getElementById("salatBtn");
+let salatPlayedOnVisit = false;
+
+function speakSalatFallback() {
+  if (!("speechSynthesis" in window)) return false;
+  try {
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance("صلّي على محمد");
+    utter.lang = "ar-EG";
+    utter.rate = 0.95;
+    const voices = window.speechSynthesis.getVoices();
+    const arVoice = voices.find((v) => v.lang && v.lang.startsWith("ar"));
+    if (arVoice) utter.voice = arVoice;
+    window.speechSynthesis.speak(utter);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function playSalatAudio(force = false) {
+  if (salatPlayedOnVisit && !force) return;
+  try {
+    const audio = new Audio("assets/salat.mp3");
+    await audio.play();
+    salatPlayedOnVisit = true;
+  } catch {
+    const ok = speakSalatFallback();
+    if (ok) salatPlayedOnVisit = true;
+  }
+}
+
+if (salatBtn) {
+  salatBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    playSalatAudio(true);
+  });
+}
+
+// تشغيل تلقائي عند الدخول أو مع أول لمسة لو المتصفح منع التشغيل التلقائي
+window.addEventListener("load", () => {
+  playSalatAudio(false);
+});
+
+const unlockAudioOnFirstTouch = () => {
+  if (!salatPlayedOnVisit) {
+    playSalatAudio(false);
+  }
+  document.removeEventListener("pointerdown", unlockAudioOnFirstTouch);
+  document.removeEventListener("keydown", unlockAudioOnFirstTouch);
+};
+document.addEventListener("pointerdown", unlockAudioOnFirstTouch, { once: true });
+document.addEventListener("keydown", unlockAudioOnFirstTouch, { once: true });
+
 // Init
 document.getElementById("yearNow").textContent = new Date().getFullYear();
 renderAuthNav();
