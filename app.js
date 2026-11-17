@@ -723,9 +723,17 @@ const salatBtn = document.getElementById("salatBtn");
 const salatAudio = new Audio("assets/salat.mp3");
 salatAudio.preload = "auto";
 let salatPlayedOnVisit = false;
+let salatAttempting = false;
+
+function removeAudioUnlockListeners() {
+  document.removeEventListener("pointerdown", unlockAudioOnFirstTouch);
+  document.removeEventListener("touchstart", unlockAudioOnFirstTouch);
+  document.removeEventListener("keydown", unlockAudioOnFirstTouch);
+}
 
 function playSalatAudio(force = false) {
-  if (salatPlayedOnVisit && !force) return;
+  if (!force && (salatPlayedOnVisit || salatAttempting)) return;
+  salatAttempting = true;
   try {
     salatAudio.currentTime = 0;
     const playPromise = salatAudio.play();
@@ -733,15 +741,19 @@ function playSalatAudio(force = false) {
       playPromise
         .then(() => {
           salatPlayedOnVisit = true;
+          salatAttempting = false;
+          removeAudioUnlockListeners();
         })
         .catch(() => {
-          // سيتم التشغيل تلقائياً مع أول لمسة في الصفحة
+          salatAttempting = false;
         });
     } else {
       salatPlayedOnVisit = true;
+      salatAttempting = false;
+      removeAudioUnlockListeners();
     }
   } catch {
-    // تجاهل الخطأ لو المتصفح منع التشغيل التلقائي
+    salatAttempting = false;
   }
 }
 
@@ -752,21 +764,16 @@ if (salatBtn) {
   });
 }
 
-// تشغيل تلقائي عند الدخول أو مع أول لمسة لو المتصفح منع التشغيل التلقائي
+// تشغيل مرة واحدة فقط عند الدخول (أو مع أول لمسة لو المتصفح منع التشغيل التلقائي)
 window.addEventListener("load", () => {
   playSalatAudio(false);
 });
 
-const unlockAudioOnFirstTouch = () => {
+function unlockAudioOnFirstTouch() {
   if (!salatPlayedOnVisit) {
     playSalatAudio(false);
   }
-  if (salatPlayedOnVisit) {
-    document.removeEventListener("pointerdown", unlockAudioOnFirstTouch);
-    document.removeEventListener("touchstart", unlockAudioOnFirstTouch);
-    document.removeEventListener("keydown", unlockAudioOnFirstTouch);
-  }
-};
+}
 document.addEventListener("pointerdown", unlockAudioOnFirstTouch);
 document.addEventListener("touchstart", unlockAudioOnFirstTouch, { passive: true });
 document.addEventListener("keydown", unlockAudioOnFirstTouch);
