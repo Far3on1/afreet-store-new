@@ -720,7 +720,7 @@ document.querySelectorAll(".nav-link").forEach((link) => {
 // صوت "صلِّ على محمد" عند دخول الموقع
 // ==========================================
 const salatBtn = document.getElementById("salatBtn");
-const salatAudio = new Audio("assets/salat.mp3");
+const salatAudio = new Audio("assets/ssstik.io_1794955071393.mp3");
 salatAudio.preload = "auto";
 let salatPlayedOnVisit = false;
 let salatAttempting = false;
