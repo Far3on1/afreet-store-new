@@ -1570,9 +1570,7 @@ select {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(4, 5, 10, 0.72);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+    background: rgba(4, 5, 10, 0.42);
     touch-action: none;
     z-index: 240;
   }
