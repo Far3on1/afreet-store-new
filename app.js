@@ -720,34 +720,28 @@ document.querySelectorAll(".nav-link").forEach((link) => {
 // صوت "صلِّ على محمد" عند دخول الموقع
 // ==========================================
 const salatBtn = document.getElementById("salatBtn");
+const salatAudio = new Audio("assets/salat.mp3");
+salatAudio.preload = "auto";
 let salatPlayedOnVisit = false;
 
-function speakSalatFallback() {
-  if (!("speechSynthesis" in window)) return false;
-  try {
-    window.speechSynthesis.cancel();
-    const utter = new SpeechSynthesisUtterance("صلّي على محمد");
-    utter.lang = "ar-EG";
-    utter.rate = 0.95;
-    const voices = window.speechSynthesis.getVoices();
-    const arVoice = voices.find((v) => v.lang && v.lang.startsWith("ar"));
-    if (arVoice) utter.voice = arVoice;
-    window.speechSynthesis.speak(utter);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-async function playSalatAudio(force = false) {
+function playSalatAudio(force = false) {
   if (salatPlayedOnVisit && !force) return;
   try {
-    const audio = new Audio("assets/salat.mp3");
-    await audio.play();
-    salatPlayedOnVisit = true;
+    salatAudio.currentTime = 0;
+    const playPromise = salatAudio.play();
+    if (playPromise && typeof playPromise.then === "function") {
+      playPromise
+        .then(() => {
+          salatPlayedOnVisit = true;
+        })
+        .catch(() => {
+          // سيتم التشغيل تلقائياً مع أول لمسة في الصفحة
+        });
+    } else {
+      salatPlayedOnVisit = true;
+    }
   } catch {
-    const ok = speakSalatFallback();
-    if (ok) salatPlayedOnVisit = true;
+    // تجاهل الخطأ لو المتصفح منع التشغيل التلقائي
   }
 }
 
@@ -767,11 +761,15 @@ const unlockAudioOnFirstTouch = () => {
   if (!salatPlayedOnVisit) {
     playSalatAudio(false);
   }
-  document.removeEventListener("pointerdown", unlockAudioOnFirstTouch);
-  document.removeEventListener("keydown", unlockAudioOnFirstTouch);
+  if (salatPlayedOnVisit) {
+    document.removeEventListener("pointerdown", unlockAudioOnFirstTouch);
+    document.removeEventListener("touchstart", unlockAudioOnFirstTouch);
+    document.removeEventListener("keydown", unlockAudioOnFirstTouch);
+  }
 };
-document.addEventListener("pointerdown", unlockAudioOnFirstTouch, { once: true });
-document.addEventListener("keydown", unlockAudioOnFirstTouch, { once: true });
+document.addEventListener("pointerdown", unlockAudioOnFirstTouch);
+document.addEventListener("touchstart", unlockAudioOnFirstTouch, { passive: true });
+document.addEventListener("keydown", unlockAudioOnFirstTouch);
 
 // Init
 document.getElementById("yearNow").textContent = new Date().getFullYear();
