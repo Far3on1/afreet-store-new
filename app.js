@@ -717,13 +717,23 @@ document.querySelectorAll(".nav-link").forEach((link) => {
 });
 
 // ==========================================
-// صوت "صلِّ على محمد" عند دخول الموقع
+// صوت "صلِّ على محمد" عند دخول الموقع (تشغيل / إيقاف)
 // ==========================================
 const salatBtn = document.getElementById("salatBtn");
+const salatIcon = salatBtn ? salatBtn.querySelector(".salat-icon") : null;
 const salatAudio = new Audio("assets/ssstik.io_1794955071393.mp3");
 salatAudio.preload = "auto";
 let salatPlayedOnVisit = false;
 let salatAttempting = false;
+
+function updateSalatIcon(isPlaying) {
+  if (!salatIcon) return;
+  salatIcon.textContent = isPlaying ? "⏸️" : "🔊";
+}
+
+salatAudio.addEventListener("play", () => updateSalatIcon(true));
+salatAudio.addEventListener("pause", () => updateSalatIcon(false));
+salatAudio.addEventListener("ended", () => updateSalatIcon(false));
 
 function removeAudioUnlockListeners() {
   document.removeEventListener("pointerdown", unlockAudioOnFirstTouch);
@@ -735,7 +745,11 @@ function playSalatAudio(force = false) {
   if (!force && (salatPlayedOnVisit || salatAttempting)) return;
   salatAttempting = true;
   try {
-    salatAudio.currentTime = 0;
+    if (force && salatAudio.ended) {
+      salatAudio.currentTime = 0;
+    } else if (!force) {
+      salatAudio.currentTime = 0;
+    }
     const playPromise = salatAudio.play();
     if (playPromise && typeof playPromise.then === "function") {
       playPromise
@@ -760,7 +774,14 @@ function playSalatAudio(force = false) {
 if (salatBtn) {
   salatBtn.addEventListener("click", (e) => {
     e.stopPropagation();
-    playSalatAudio(true);
+    salatPlayedOnVisit = true;
+    removeAudioUnlockListeners();
+    if (!salatAudio.paused && !salatAudio.ended) {
+      salatAudio.pause();
+    } else {
+      if (salatAudio.ended) salatAudio.currentTime = 0;
+      playSalatAudio(true);
+    }
   });
 }
 
