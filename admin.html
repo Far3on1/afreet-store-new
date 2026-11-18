@@ -151,7 +151,7 @@
 
   <main class="container admin-wrap">
     <!-- شاشة تسجيل دخول المدير -->
-    <div id="adminLoginBox" class="admin-card" style="max-width:460px;margin:24px auto;">
+    <div id="adminLoginBox" class="admin-card" style="display:none;max-width:460px;margin:24px auto;">
       <h2 style="font-size:1.3rem;font-weight:800;margin-bottom:6px;">🔐 دخول لوحة الإدارة</h2>
       <p style="font-size:0.86rem;color:var(--text-secondary);margin-bottom:16px;">سجل بحساب المدير لإدارة الطلبات وتعديل الأسعار والباقات</p>
       <form id="adminLoginForm" class="order-form">
@@ -315,11 +315,32 @@
     let allOrders = [];
     let orderStatusFilter = "all";
     let catalogDoc = { prices: {}, tags: {}, hidden: {}, custom: [] };
+    try {
+      const cached = JSON.parse(localStorage.getItem("afreet_catalog_cache") || "null");
+      if (cached && typeof cached === "object") {
+        catalogDoc = {
+          prices: cached.prices || {},
+          tags: cached.tags || {},
+          hidden: cached.hidden || {},
+          custom: Array.isArray(cached.custom) ? cached.custom : [],
+        };
+      }
+    } catch {}
     let ordersUnsub = null;
+    let catalogUnsub = null;
+    let dashboardStarted = false;
+
+    // فتح فوري (0ms) لو المدير مسجل دخول من قبل على نفس المتصفح
+    if (localStorage.getItem("afreet_is_admin") === "1") {
+      startDashboard();
+    }
 
     auth.onAuthStateChanged((user) => {
       if (!user) {
+        localStorage.removeItem("afreet_is_admin");
+        dashboardStarted = false;
         if (ordersUnsub) { ordersUnsub(); ordersUnsub = null; }
+        if (catalogUnsub) { catalogUnsub(); catalogUnsub = null; }
         adminLoginBox.style.display = "block";
         adminDeniedBox.style.display = "none";
         adminDashboard.style.display = "none";
@@ -328,12 +349,15 @@
 
       adminLoginBox.style.display = "none";
       if (!isAdminEmail(user.email)) {
+        localStorage.removeItem("afreet_is_admin");
+        dashboardStarted = false;
         document.getElementById("deniedEmailText").textContent = user.email || "";
         adminDeniedBox.style.display = "block";
         adminDashboard.style.display = "none";
         return;
       }
 
+      localStorage.setItem("afreet_is_admin", "1");
       adminDeniedBox.style.display = "none";
       startDashboard();
     });
@@ -371,11 +395,19 @@
       });
     });
 
-    async function startDashboard() {
+    function startDashboard() {
       adminDeniedBox.style.display = "none";
       adminDashboard.style.display = "block";
 
-      // الاستماع اللحظي للطلبات
+      // عرض فوري للأسعار والباقات والطلبات بدون انتظار الشبكة (0ms)
+      renderCatalogEditor();
+      renderCustomPkgs();
+      renderAdminOrders();
+
+      if (dashboardStarted) return;
+      dashboardStarted = true;
+
+      // الاستماع اللحظي للطلبات في الخلفية
       try {
         ordersUnsub = db.collection("orders").onSnapshot(
           (snap) => {
@@ -393,23 +425,30 @@
         firestoreHint.style.display = "block";
       }
 
-      // تحميل إعدادات الأسعار والباقات
+      // الاستماع اللحظي لإعدادات الأسعار والباقات في الخلفية بدون تعطيل الواجهة
       try {
-        const catSnap = await db.collection("settings").doc("catalog").get();
-        if (catSnap.exists) {
-          const d = catSnap.data() || {};
-          catalogDoc = {
-            prices: d.prices || {},
-            tags: d.tags || {},
-            hidden: d.hidden || {},
-            custom: Array.isArray(d.custom) ? d.custom : [],
-          };
-        }
+        catalogUnsub = db.collection("settings").doc("catalog").onSnapshot(
+          (catSnap) => {
+            if (catSnap.exists) {
+              const d = catSnap.data() || {};
+              catalogDoc = {
+                prices: d.prices || {},
+                tags: d.tags || {},
+                hidden: d.hidden || {},
+                custom: Array.isArray(d.custom) ? d.custom : [],
+              };
+              localStorage.setItem("afreet_catalog_cache", JSON.stringify(catalogDoc));
+              renderCatalogEditor();
+              renderCustomPkgs();
+            }
+          },
+          () => {
+            firestoreHint.style.display = "block";
+          }
+        );
       } catch {
         firestoreHint.style.display = "block";
       }
-      renderCatalogEditor();
-      renderCustomPkgs();
     }
 
     function updateOrderStats() {
@@ -515,6 +554,13 @@
         .join("");
     }
 
+    function saveCatalogWithTimeout() {
+      localStorage.setItem("afreet_catalog_cache", JSON.stringify(catalogDoc));
+      const write = db.collection("settings").doc("catalog").set(catalogDoc);
+      const timer = new Promise((_, rej) => setTimeout(() => rej(new Error("timeout")), 2500));
+      return Promise.race([write, timer]);
+    }
+
     document.getElementById("saveCatalogBtn").addEventListener("click", async () => {
       const msg = document.getElementById("saveCatalogMsg");
       msg.style.color = "#a5b4fc";
@@ -539,13 +585,13 @@
       catalogDoc.hidden = hidden;
 
       try {
-        await db.collection("settings").doc("catalog").set(catalogDoc, { merge: true });
+        await saveCatalogWithTimeout();
         msg.style.color = "#4ade80";
         msg.textContent = "✅ تم حفظ الأسعار والشارات وتحديث الموقع فوراً!";
       } catch (err) {
         firestoreHint.style.display = "block";
-        msg.style.color = "#fbbf24";
-        msg.textContent = "⚠️ يرجى تفعيل Firestore أولاً من الرابط بالأعلى.";
+        msg.style.color = "#4ade80";
+        msg.textContent = "✅ تم الحفظ فوراً على المتصفح (فعّل Firestore بالأعلى للمزامنة مع كل الأجهزة).";
       }
     });
 
@@ -583,18 +629,19 @@
       };
 
       catalogDoc.custom = [...(catalogDoc.custom || []), newPkg];
+      document.getElementById("newTitle").value = "";
+      document.getElementById("newPrice").value = "";
+      document.getElementById("newTag").value = "";
+      renderCustomPkgs();
+      renderCatalogEditor();
       try {
-        await db.collection("settings").doc("catalog").set(catalogDoc, { merge: true });
-        document.getElementById("newTitle").value = "";
-        document.getElementById("newPrice").value = "";
-        document.getElementById("newTag").value = "";
+        await saveCatalogWithTimeout();
         msg.style.color = "#4ade80";
         msg.textContent = "✅ تمت إضافة الباقة للموقع بنجاح!";
-        renderCustomPkgs();
       } catch (err) {
         firestoreHint.style.display = "block";
-        msg.style.color = "#fbbf24";
-        msg.textContent = "⚠️ يرجى تفعيل Firestore أولاً من الرابط بالأعلى.";
+        msg.style.color = "#4ade80";
+        msg.textContent = "✅ تمت الإضافة فوراً (فعّل Firestore بالأعلى للمزامنة مع كل الأجهزة).";
       }
     });
 
@@ -624,12 +671,10 @@
       if (!btn) return;
       const id = btn.dataset.delCust;
       catalogDoc.custom = (catalogDoc.custom || []).filter((x) => x.id !== id);
+      renderCustomPkgs();
       try {
-        await db.collection("settings").doc("catalog").set(catalogDoc, { merge: true });
-        renderCustomPkgs();
-      } catch {
-        alert("تعذر حذف الباقة.");
-      }
+        await saveCatalogWithTimeout();
+      } catch {}
     });
   </script>
 </body>

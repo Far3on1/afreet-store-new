@@ -252,7 +252,10 @@ fbAuth.onAuthStateChanged(async (user) => {
 
 function renderAuthNav() {
   if (currentUser) {
-    const adminLink = isAdminEmail(currentUser.email)
+    const isAdmin = isAdminEmail(currentUser.email);
+    if (isAdmin) localStorage.setItem("afreet_is_admin", "1");
+    else localStorage.removeItem("afreet_is_admin");
+    const adminLink = isAdmin
       ? `<a href="admin.html" class="admin-nav-btn" title="فتح صفحة الأدمن">⚙️ الإدارة</a>`
       : "";
     authNavArea.innerHTML = `
@@ -767,7 +770,7 @@ orderForm.addEventListener("submit", async (e) => {
       status: "pending",
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
     });
-    const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), 8000));
+    const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), 1500));
     await Promise.race([save, timeout]);
     orderCode = code;
     toastMsg.style.color = "#4ade80";
@@ -928,10 +931,22 @@ document.addEventListener("keydown", unlockAudioOnFirstTouch);
 // Init
 document.getElementById("yearNow").textContent = new Date().getFullYear();
 renderAuthNav();
-populatePackageSelect();
-renderDiamonds();
-renderIdOffers();
-renderPackages();
+try {
+  const cachedCatalog = JSON.parse(localStorage.getItem("afreet_catalog_cache") || "null");
+  if (cachedCatalog && typeof cachedCatalog === "object") {
+    applyCatalog(cachedCatalog);
+  } else {
+    populatePackageSelect();
+    renderDiamonds();
+    renderIdOffers();
+    renderPackages();
+  }
+} catch {
+  populatePackageSelect();
+  renderDiamonds();
+  renderIdOffers();
+  renderPackages();
+}
 
 // مزامنة الأسعار والباقات مباشرة من لوحة التحكم (Firestore)
 try {
@@ -941,7 +956,9 @@ try {
     .onSnapshot(
       (doc) => {
         if (doc.exists) {
-          applyCatalog(doc.data());
+          const data = doc.data();
+          localStorage.setItem("afreet_catalog_cache", JSON.stringify(data));
+          applyCatalog(data);
         }
       },
       (err) => {
