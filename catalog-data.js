@@ -1,6 +1,16 @@
 // ==========================================
 // بيانات أسعار فري فاير (جواهر أكونت)
 // ==========================================
+// إيميلات الأدمن المصرح لها بدخول لوحة الإدارة
+const ADMIN_EMAILS = [
+  "3afretbasha@gmail.com",
+  "a01201426302@gmail.com",
+];
+
+function isAdminEmail(email) {
+  return ADMIN_EMAILS.includes(String(email || "").trim().toLowerCase());
+}
+
 const DIAMOND_PACKAGES = [
   { id: "ff-100", title: "100 جوهرة", subtitle: "شحن مباشر بالأكونت", price: 50, icon: "💎", tag: "بداية سريعة" },
   { id: "ff-200", title: "200 جوهرة", subtitle: "شحن مباشر بالأكونت", price: 100, icon: "💎", tag: "اختيار ذكي" },

@@ -252,19 +252,25 @@ fbAuth.onAuthStateChanged(async (user) => {
 
 function renderAuthNav() {
   if (currentUser) {
+    const adminLink = isAdminEmail(currentUser.email)
+      ? `<a href="admin.html" class="admin-nav-btn" title="فتح صفحة الأدمن">⚙️ الإدارة</a>`
+      : "";
     authNavArea.innerHTML = `
-      <div class="user-pill">
-        <button type="button" class="user-pill-trigger" id="openProfileBtn" title="فتح الملف الشخصي">
-          <img class="user-pill-avatar" src="${esc(currentUser.avatar)}" alt="${esc(currentUser.name)}" />
-          <span class="user-pill-name">${esc(currentUser.name)}</span>
-          <span class="verified-badge" title="حساب موثق">
-            <svg viewBox="0 0 24 24" fill="none">
-              <circle cx="12" cy="12" r="10" fill="#0095F6"/>
-              <path d="M8.5 12.5L10.8 14.8L15.8 9.8" stroke="#FFFFFF" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </span>
-        </button>
-        <button type="button" class="logout-btn" id="logoutBtn">خروج</button>
+      <div class="auth-nav-group">
+        ${adminLink}
+        <div class="user-pill">
+          <button type="button" class="user-pill-trigger" id="openProfileBtn" title="فتح الملف الشخصي">
+            <img class="user-pill-avatar" src="${esc(currentUser.avatar)}" alt="${esc(currentUser.name)}" />
+            <span class="user-pill-name">${esc(currentUser.name)}</span>
+            <span class="verified-badge" title="حساب موثق">
+              <svg viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="10" fill="#0095F6"/>
+                <path d="M8.5 12.5L10.8 14.8L15.8 9.8" stroke="#FFFFFF" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </button>
+          <button type="button" class="logout-btn" id="logoutBtn">خروج</button>
+        </div>
       </div>
     `;
     document.getElementById("openProfileBtn").addEventListener("click", openProfileModal);
@@ -423,7 +429,16 @@ function openProfileModal() {
   profileAvatarImg.src = currentUser.avatar;
   profileModalTitle.textContent = currentUser.name;
   profileEmailText.textContent = currentUser.email || "حساب عفريت";
-  profileProviderBadge.textContent = currentUser.isGoogle ? "مسجل بحساب جوجل (Gmail)" : "مسجل بالإيميل";
+  const isAdmin = isAdminEmail(currentUser.email);
+  profileProviderBadge.textContent = isAdmin
+    ? "👑 مدير المتجر (أدمن)"
+    : currentUser.isGoogle
+    ? "مسجل بحساب جوجل (Gmail)"
+    : "مسجل بالإيميل";
+  const profileAdminBtn = document.getElementById("profileAdminBtn");
+  if (profileAdminBtn) {
+    profileAdminBtn.style.display = isAdmin ? "inline-flex" : "none";
+  }
 
   // الرجوع لتبويب البيانات الشخصية عند كل فتح
   profileTabs.forEach((t) => t.classList.toggle("active", t.dataset.profileTab === "info"));

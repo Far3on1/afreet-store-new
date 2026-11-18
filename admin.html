@@ -168,15 +168,16 @@
       </form>
     </div>
 
-    <!-- شاشة تفعيل حساب المدير لأول مرة -->
-    <div id="adminClaimBox" class="admin-card" style="display:none;max-width:520px;margin:24px auto;text-align:center;">
-      <h2 style="font-size:1.3rem;font-weight:800;margin-bottom:8px;">👑 تفعيل حساب مدير المتجر</h2>
+    <!-- شاشة رفض الدخول لغير إيميلات الأدمن -->
+    <div id="adminDeniedBox" class="admin-card" style="display:none;max-width:520px;margin:24px auto;text-align:center;">
+      <h2 style="font-size:1.3rem;font-weight:800;color:#fca5a5;margin-bottom:8px;">🔒 غير مصرح بالدخول</h2>
       <p style="font-size:0.9rem;color:var(--text-secondary);margin-bottom:16px;">
-        أنت مسجل الدخول الآن بحساب: <strong id="claimEmailText" style="color:#5eead4;"></strong><br/>
-        اضغط الزر بالأسفل لربط هذا الحساب كمدير وحيد لمتجر عفريت.
+        الحساب <strong id="deniedEmailText" style="color:#fff;"></strong> ليس لديه صلاحية إدارة المتجر.
       </p>
-      <button type="button" id="claimAdminBtn" class="btn btn-primary btn-lg">👑 تعيين حسابي كمدير للمتجر</button>
-      <p class="toast-msg" id="claimMsg" style="margin-top:10px;"></p>
+      <div style="display:flex;gap:10px;justify-content:center;">
+        <button type="button" id="deniedLogoutBtn" class="btn btn-primary btn-sm">تسجيل الخروج والدخول بحساب الأدمن</button>
+        <a href="index.html" class="btn btn-glass btn-sm">العودة للموقع</a>
+      </div>
     </div>
 
     <!-- لوحة الإدارة الكاملة -->
@@ -307,7 +308,7 @@
       String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
     const adminLoginBox = document.getElementById("adminLoginBox");
-    const adminClaimBox = document.getElementById("adminClaimBox");
+    const adminDeniedBox = document.getElementById("adminDeniedBox");
     const adminDashboard = document.getElementById("adminDashboard");
     const firestoreHint = document.getElementById("firestoreHint");
 
@@ -316,71 +317,45 @@
     let catalogDoc = { prices: {}, tags: {}, hidden: {}, custom: [] };
     let ordersUnsub = null;
 
-    auth.onAuthStateChanged(async (user) => {
+    auth.onAuthStateChanged((user) => {
       if (!user) {
         if (ordersUnsub) { ordersUnsub(); ordersUnsub = null; }
         adminLoginBox.style.display = "block";
-        adminClaimBox.style.display = "none";
+        adminDeniedBox.style.display = "none";
         adminDashboard.style.display = "none";
         return;
       }
 
       adminLoginBox.style.display = "none";
-      try {
-        const admSnap = await db.collection("settings").doc("admin").get();
-        if (!admSnap.exists || !admSnap.data()?.ownerUid) {
-          document.getElementById("claimEmailText").textContent = user.email || user.uid;
-          adminClaimBox.style.display = "block";
-          adminDashboard.style.display = "none";
-          return;
-        }
-        if (admSnap.data().ownerUid !== user.uid) {
-          adminClaimBox.style.display = "block";
-          adminClaimBox.innerHTML = `<h3 style="color:#fca5a5;">🔒 غير مصرح لهذا الحساب (${esc(user.email)}) بدخول لوحة الإدارة</h3>
-            <button type="button" onclick="firebase.auth().signOut()" class="btn btn-glass btn-sm" style="margin-top:12px;">تسجيل الخروج</button>`;
-          adminDashboard.style.display = "none";
-          return;
-        }
-        startDashboard();
-      } catch (err) {
-        // إذا كانت قاعدة البيانات غير مفعلة بعد، نفتح اللوحة مع إظهار تنبيه التفعيل
-        firestoreHint.style.display = "block";
-        startDashboard();
+      if (!isAdminEmail(user.email)) {
+        document.getElementById("deniedEmailText").textContent = user.email || "";
+        adminDeniedBox.style.display = "block";
+        adminDashboard.style.display = "none";
+        return;
       }
+
+      adminDeniedBox.style.display = "none";
+      startDashboard();
     });
 
     document.getElementById("adminLoginForm").addEventListener("submit", async (e) => {
       e.preventDefault();
       const errEl = document.getElementById("admLoginErr");
       errEl.textContent = "";
+      const email = document.getElementById("admEmail").value.trim();
+      const pass = document.getElementById("admPass").value;
+      if (!isAdminEmail(email)) {
+        errEl.textContent = "🔒 هذا الإيميل غير مصرح له بدخول لوحة الإدارة";
+        return;
+      }
       try {
-        await auth.signInWithEmailAndPassword(
-          document.getElementById("admEmail").value.trim(),
-          document.getElementById("admPass").value
-        );
+        await auth.signInWithEmailAndPassword(email, pass);
       } catch (err) {
         errEl.textContent = "❌ الإيميل أو كلمة المرور غير صحيحة";
       }
     });
 
-    document.getElementById("claimAdminBtn").addEventListener("click", async () => {
-      const user = auth.currentUser;
-      if (!user) return;
-      const msg = document.getElementById("claimMsg");
-      try {
-        await db.collection("settings").doc("admin").set({
-          ownerUid: user.uid,
-          ownerEmail: user.email || "",
-          claimedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        });
-        adminClaimBox.style.display = "none";
-        startDashboard();
-      } catch (err) {
-        firestoreHint.style.display = "block";
-        msg.style.color = "#fbbf24";
-        msg.textContent = "⚠️ يرجى تفعيل Firestore أولاً من الرابط بالأعلى ثم الضغط مرة أخرى.";
-      }
-    });
+    document.getElementById("deniedLogoutBtn").addEventListener("click", () => auth.signOut());
 
     document.getElementById("admLogoutBtn").addEventListener("click", () => auth.signOut());
 
@@ -397,7 +372,7 @@
     });
 
     async function startDashboard() {
-      adminClaimBox.style.display = "none";
+      adminDeniedBox.style.display = "none";
       adminDashboard.style.display = "block";
 
       // الاستماع اللحظي للطلبات

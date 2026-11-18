@@ -2259,3 +2259,36 @@ body {
   color: #fca5a5;
   border: 1px solid rgba(239, 68, 68, 0.35);
 }
+
+.auth-nav-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #6366f1 0%, #14b8a6 100%);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 800;
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.45);
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.admin-nav-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(20, 184, 166, 0.5);
+}
+
+@media (max-width: 720px) {
+  .admin-nav-btn {
+    padding: 4px 9px;
+    font-size: 0.72rem;
+  }
+}
