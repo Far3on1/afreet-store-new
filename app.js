@@ -141,8 +141,18 @@ function renderPackages() {
 // Populate Select Dropdown inside Modal
 function populatePackageSelect() {
   packageSelect.innerHTML = ALL_ITEMS.map(
-    (item) => `<option value="${item.id}">${item.title} — ${formatPrice(item.price)} ج.م</option>`
+    (item) => `<option value="${esc(item.id)}">${esc(item.title)} — ${formatPrice(item.price)} ج.م</option>`
   ).join("");
+  const pkgDdMenu = document.getElementById("pkgDdMenu");
+  if (pkgDdMenu) {
+    pkgDdMenu.innerHTML = ALL_ITEMS.map(
+      (item) => `
+      <button type="button" class="pkg-dd-item" data-pkg-pick="${esc(item.id)}">
+        <span>${esc(item.icon)} ${esc(item.title)}</span>
+        <span class="pkg-dd-price">${formatPrice(item.price)} ج.م</span>
+      </button>`
+    ).join("");
+  }
 }
 
 // Open Order Modal
@@ -665,9 +675,18 @@ function updateModalSummary(item) {
   modalItemName.textContent = `${item.icon} ${item.title}`;
   modalItemPrice.textContent = `${formatPrice(item.price)} ج.م`;
   modalCategory.textContent = item.subtitle;
+  const pkgDdLabel = document.getElementById("pkgDdLabel");
+  if (pkgDdLabel) {
+    pkgDdLabel.textContent = `${item.icon} ${item.title} — ${formatPrice(item.price)} ج.م`;
+  }
+  document.querySelectorAll(".pkg-dd-item").forEach((el) => {
+    el.classList.toggle("active", el.dataset.pkgPick === item.id);
+  });
 }
 
 function closeOrderModal() {
+  const customPkgDd = document.getElementById("customPkgDd");
+  if (customPkgDd) customPkgDd.classList.remove("open");
   orderModal.classList.remove("open");
   orderModal.setAttribute("aria-hidden", "true");
   syncModalScrollLock();
@@ -729,6 +748,41 @@ packageSelect.addEventListener("change", () => {
   const item = ALL_ITEMS.find((i) => i.id === packageSelect.value);
   if (item) updateModalSummary(item);
 });
+
+const customPkgDd = document.getElementById("customPkgDd");
+const pkgDdTrigger = document.getElementById("pkgDdTrigger");
+const pkgDdMenu = document.getElementById("pkgDdMenu");
+const payCardsGrid = document.getElementById("payCardsGrid");
+
+if (pkgDdTrigger && customPkgDd) {
+  pkgDdTrigger.addEventListener("click", (e) => {
+    e.stopPropagation();
+    customPkgDd.classList.toggle("open");
+  });
+}
+
+if (pkgDdMenu && customPkgDd) {
+  pkgDdMenu.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-pkg-pick]");
+    if (!btn) return;
+    const item = ALL_ITEMS.find((i) => i.id === btn.dataset.pkgPick);
+    if (item) {
+      packageSelect.value = item.id;
+      updateModalSummary(item);
+    }
+    customPkgDd.classList.remove("open");
+  });
+}
+
+if (payCardsGrid) {
+  payCardsGrid.addEventListener("click", (e) => {
+    const card = e.target.closest(".pay-method-card[data-pay]");
+    if (!card) return;
+    payCardsGrid.querySelectorAll(".pay-method-card").forEach((c) => c.classList.remove("active"));
+    card.classList.add("active");
+    document.getElementById("paymentMethod").value = card.dataset.pay;
+  });
+}
 
 orderForm.addEventListener("submit", async (e) => {
   e.preventDefault();

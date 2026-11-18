@@ -2404,3 +2404,193 @@ body {
     font-size: 0.72rem;
   }
 }
+
+/* ==========================================
+   كروت وسائل الدفع بشعارات الشركات + قائمة الباقات الزجاجية
+   ========================================== */
+.pay-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.pay-method-card {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 10px;
+  border-radius: 14px;
+  background: rgba(8, 10, 30, 0.55);
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-primary);
+  text-align: right;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+  min-width: 0;
+}
+
+.pay-method-card.pay-card-wide {
+  grid-column: 1 / -1;
+}
+
+.pay-method-card:hover {
+  border-color: rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.pay-method-card.active {
+  background: var(--pay-bg);
+  border-color: var(--pay-border);
+  box-shadow: 0 6px 18px -6px var(--pay-border);
+}
+
+.pay-brand-logo {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+}
+
+.pay-brand-logo svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.pay-brand-meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+  line-height: 1.25;
+}
+
+.pay-brand-meta strong {
+  font-size: 0.84rem;
+  font-weight: 800;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pay-brand-meta span {
+  font-size: 0.68rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pay-check {
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 0.7rem;
+  font-weight: 900;
+  background: rgba(255, 255, 255, 0.08);
+  color: transparent;
+  flex-shrink: 0;
+  transition: var(--transition);
+}
+
+.pay-method-card.active .pay-check {
+  background: var(--pay-color);
+  color: #fff;
+}
+
+/* قائمة تغيير الباقة الزجاجية المخصصة */
+.custom-pkg-dd {
+  position: relative;
+}
+
+.pkg-dd-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 11px 14px;
+  border-radius: 12px;
+  background: rgba(8, 10, 30, 0.65);
+  border: 1px solid rgba(165, 180, 252, 0.35);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.pkg-dd-trigger:hover {
+  border-color: #5eead4;
+}
+
+.pkg-dd-arrow {
+  font-size: 0.75rem;
+  color: #5eead4;
+  transition: transform 0.2s;
+}
+
+.custom-pkg-dd.open .pkg-dd-arrow {
+  transform: rotate(180deg);
+}
+
+.pkg-dd-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  left: 0;
+  z-index: 40;
+  max-height: 210px;
+  overflow-y: auto;
+  border-radius: 14px;
+  background: #131638;
+  border: 1px solid rgba(165, 180, 252, 0.45);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8);
+  overscroll-behavior: contain;
+}
+
+.custom-pkg-dd.open .pkg-dd-menu {
+  display: block;
+}
+
+.pkg-dd-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 14px;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-align: right;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.pkg-dd-item:last-child {
+  border-bottom: none;
+}
+
+.pkg-dd-item:hover,
+.pkg-dd-item.active {
+  background: rgba(99, 102, 241, 0.28);
+}
+
+.pkg-dd-price {
+  color: #5eead4;
+  font-weight: 800;
+  white-space: nowrap;
+}
