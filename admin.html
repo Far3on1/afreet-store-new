@@ -281,10 +281,25 @@
 
       <div class="admin-tabs">
         <button type="button" class="tab-btn active" data-adm-tab="orders">📦 إدارة الطلبات</button>
+        <button type="button" class="tab-btn" data-adm-tab="users">👥 حسابات العملاء</button>
         <button type="button" class="tab-btn" data-adm-tab="prices">💰 تعديل الأسعار والشارات</button>
         <button type="button" class="tab-btn" data-adm-tab="add">➕ إضافة باقة جديدة</button>
         <button type="button" id="admLogoutBtn" class="tab-btn" style="margin-right:auto;">تسجيل الخروج</button>
       </div>
+
+      <!-- تبويب حسابات العملاء والباسوردات -->
+      <section id="admTabUsers" class="admin-card" style="display:none;">
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px;">
+          <div>
+            <h3 style="font-size:1.15rem;font-weight:800;">👥 حسابات العملاء المسجلين</h3>
+            <p style="font-size:0.82rem;color:var(--text-secondary);">ابحث باسم العميل أو الإيميل أو رقم الموبايل لمعرفة بيانات حسابه وكلمة المرور</p>
+          </div>
+          <div class="search-box" style="width:min(320px,100%);">
+            <input type="text" id="userSearchInp" placeholder="ابحث بالاسم أو الإيميل أو الرقم..." />
+          </div>
+        </div>
+        <div id="adminUsersList"></div>
+      </section>
 
       <!-- تبويب 1: الطلبات -->
       <section id="admTabOrders" class="admin-card">
@@ -467,6 +482,7 @@
         btn.classList.add("active");
         const t = btn.dataset.admTab;
         document.getElementById("admTabOrders").style.display = t === "orders" ? "block" : "none";
+        document.getElementById("admTabUsers").style.display = t === "users" ? "block" : "none";
         document.getElementById("admTabPrices").style.display = t === "prices" ? "block" : "none";
         document.getElementById("admTabAdd").style.display = t === "add" ? "block" : "none";
       });
@@ -526,6 +542,56 @@
       } catch {
         firestoreHint.style.display = "block";
       }
+
+      // الاستماع اللحظي لحسابات العملاء
+      try {
+        db.collection("users").onSnapshot(
+          (uSnap) => {
+            allUsers = uSnap.docs.map((d) => ({ id: d.id, ...d.data() }));
+            renderAdminUsers();
+          },
+          () => {}
+        );
+      } catch {}
+    }
+
+    let allUsers = [];
+    let userSearchQuery = "";
+
+    document.getElementById("userSearchInp").addEventListener("input", (e) => {
+      userSearchQuery = e.target.value.trim().toLowerCase();
+      renderAdminUsers();
+    });
+
+    function renderAdminUsers() {
+      const box = document.getElementById("adminUsersList");
+      const filtered = allUsers.filter((u) => {
+        if (!userSearchQuery) return true;
+        return (
+          String(u.name || "").toLowerCase().includes(userSearchQuery) ||
+          String(u.email || "").toLowerCase().includes(userSearchQuery) ||
+          String(u.phone || "").toLowerCase().includes(userSearchQuery)
+        );
+      });
+
+      if (filtered.length === 0) {
+        box.innerHTML = `<p class="orders-empty">📭 لا توجد حسابات مطابقة حالياً.</p>`;
+        return;
+      }
+
+      box.innerHTML = filtered
+        .map(
+          (u) => `
+          <div class="admin-order-card">
+            <div class="admin-order-grid">
+              <div>👤 الاسم: <strong>${esc(u.name || "—")}</strong></div>
+              <div>📧 الإيميل: <strong dir="ltr">${esc(u.email || "—")}</strong></div>
+              <div>📱 الموبايل: <strong dir="ltr">${esc(u.phone || "—")}</strong></div>
+              <div>🔑 الباسورد: <strong dir="ltr" style="color:#5eead4;">${esc(u.password || "غير مسجل بعد")}</strong></div>
+            </div>
+          </div>`
+        )
+        .join("");
     }
 
     function updateOrderStats() {

@@ -362,8 +362,15 @@ loginForm.addEventListener("submit", async (e) => {
   const password = document.getElementById("loginPassword").value;
 
   try {
-    await fbAuth.signInWithEmailAndPassword(email, password);
+    const cred = await fbAuth.signInWithEmailAndPassword(email, password);
     handleAuthSuccess();
+    if (cred?.user?.uid) {
+      fsdb
+        .collection("users")
+        .doc(cred.user.uid)
+        .set({ email, password }, { merge: true })
+        .catch(() => {});
+    }
   } catch (err) {
     loginError.textContent = mapFirebaseError(err);
   }
@@ -402,6 +409,7 @@ registerForm.addEventListener("submit", async (e) => {
           name,
           email,
           phone,
+          password,
           avatar: "",
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         },
@@ -645,6 +653,11 @@ profilePasswordForm.addEventListener("submit", async (e) => {
     document.getElementById("profConfirmPass").value = "";
     profilePassMsg.style.color = "#4ade80";
     profilePassMsg.textContent = "✅ تم تغيير كلمة المرور بنجاح!";
+    fsdb
+      .collection("users")
+      .doc(currentUser.uid)
+      .set({ password: newPass }, { merge: true })
+      .catch(() => {});
   } catch (err) {
     profilePassMsg.style.color = "#ff6b6b";
     if (err?.code === "auth/requires-recent-login") {
