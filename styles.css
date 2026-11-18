@@ -2088,3 +2088,99 @@ body {
   border-color: rgba(165, 180, 252, 0.5);
   color: #a5b4fc;
 }
+
+/* ==========================================
+   Ticket-style price cards (Design #3)
+   ========================================== */
+.price-card.ticket-card {
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: stretch;
+  padding: 0;
+  border-radius: 16px;
+}
+
+.ticket-main {
+  flex: 1;
+  min-width: 0;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+}
+
+.ticket-tag {
+  align-self: flex-start;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #5eead4;
+  margin-bottom: 4px;
+}
+
+.ticket-stub {
+  width: 40%;
+  min-width: 96px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 6px;
+  background: linear-gradient(135deg, #6366f1 0%, #14b8a6 100%);
+  border-right: 2px dashed rgba(255, 255, 255, 0.4);
+  color: #fff;
+}
+
+.ticket-price {
+  font-family: "Changa", "Cairo", sans-serif;
+  font-size: 1.7rem;
+  font-weight: 800;
+  line-height: 1.05;
+}
+
+.ticket-cur {
+  font-size: 0.72rem;
+  opacity: 0.92;
+}
+
+.price-card.ticket-card .ticket-btn,
+.price-card.ticket-card:hover .ticket-btn {
+  width: auto;
+  margin-top: 6px;
+  padding: 4px 12px;
+  border: none;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.3);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.price-card.ticket-card:hover .ticket-btn {
+  background: rgba(0, 0, 0, 0.48);
+}
+
+@media (max-width: 720px) {
+  .ticket-main {
+    padding: 10px 9px;
+  }
+
+  .ticket-stub {
+    width: 42%;
+    min-width: 74px;
+    padding: 8px 4px;
+  }
+
+  .ticket-price {
+    font-size: 1.3rem;
+  }
+
+  .price-card.ticket-card .card-title {
+    font-size: 0.86rem;
+  }
+
+  .price-card.ticket-card .ticket-btn {
+    padding: 3px 9px;
+    font-size: 0.72rem;
+  }
+}

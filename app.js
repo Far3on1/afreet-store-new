@@ -107,29 +107,25 @@ function renderDiamonds() {
     return;
   }
 
-  diamondsGrid.innerHTML = filtered
-    .map(
-      (item) => `
-      <article class="price-card ${item.popular ? "popular" : ""}">
-        <div class="card-top">
-          <div>
-            <h3 class="card-title">${item.title}</h3>
-            <p class="card-sub">${item.subtitle}</p>
-          </div>
-          ${item.tag ? `<span class="card-ribbon">${item.tag}</span>` : ""}
+  diamondsGrid.innerHTML = filtered.map((item) => ticketCard(item, "")).join("");
+}
+
+// Ticket-style price card (shared by all price sections)
+function ticketCard(item, extraClass) {
+  return `
+      <article class="price-card ticket-card ${extraClass} ${item.popular ? "popular" : ""}">
+        <div class="ticket-main">
+          ${item.tag ? `<span class="ticket-tag">${item.tag}</span>` : ""}
+          <h3 class="card-title">${item.icon} ${item.title}</h3>
+          <p class="card-sub">${item.subtitle}</p>
         </div>
-        <div class="card-price-row">
-          <div>
-            <span class="price-amount">${formatPrice(item.price)}</span>
-            <span class="price-currency">ج.م</span>
-          </div>
-          <span class="price-tag">متاح الآن</span>
+        <div class="ticket-stub">
+          <span class="ticket-price">${formatPrice(item.price)}</span>
+          <span class="ticket-cur">ج.م</span>
+          <button class="card-btn ticket-btn" data-id="${item.id}">اطلب ←</button>
         </div>
-        <button class="card-btn" data-id="${item.id}">اطلب الآن</button>
       </article>
-    `
-    )
-    .join("");
+    `;
 }
 
 // Render ID Offers Cards
@@ -147,29 +143,7 @@ function renderIdOffers() {
     return;
   }
 
-  idOffersGrid.innerHTML = filtered
-    .map(
-      (item) => `
-      <article class="price-card id-card ${item.popular ? "popular" : ""}">
-        <div class="card-top">
-          <div>
-            <h3 class="card-title">${item.title}</h3>
-            <p class="card-sub">${item.subtitle}</p>
-          </div>
-          ${item.tag ? `<span class="card-ribbon">${item.tag}</span>` : ""}
-        </div>
-        <div class="card-price-row">
-          <div>
-            <span class="price-amount">${formatPrice(item.price)}</span>
-            <span class="price-currency">ج.م</span>
-          </div>
-          <span class="price-tag">شحن بالـ ID</span>
-        </div>
-        <button class="card-btn" data-id="${item.id}">اطلب الآن</button>
-      </article>
-    `
-    )
-    .join("");
+  idOffersGrid.innerHTML = filtered.map((item) => ticketCard(item, "id-card")).join("");
 }
 
 // Render Package Cards
@@ -192,24 +166,7 @@ function renderPackages() {
   packagesGrid.innerHTML = filtered
     .map((item) => {
       const isBulk = item.category === "weekly-bulk" || item.category === "monthly-bulk";
-      return `
-      <article class="price-card ${isBulk ? "bulk-card" : "pkg-card"} ${item.popular ? "popular" : ""}">
-        <div class="card-top">
-          <div>
-            <h3 class="card-title">${item.title}</h3>
-            <p class="card-sub">${item.subtitle}</p>
-          </div>
-          ${item.tag ? `<span class="card-ribbon">${item.tag}</span>` : ""}
-        </div>
-        <div class="card-price-row">
-          <div>
-            <span class="price-amount">${formatPrice(item.price)}</span>
-            <span class="price-currency">ج.م</span>
-          </div>
-        </div>
-        <button class="card-btn" data-id="${item.id}">اطلب الآن</button>
-      </article>
-    `;
+      return ticketCard(item, isBulk ? "bulk-card" : "pkg-card");
     })
     .join("");
 }
