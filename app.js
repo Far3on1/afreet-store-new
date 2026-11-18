@@ -231,31 +231,44 @@ fbAuth.onAuthStateChanged(async (user) => {
   // أثناء إنشاء حساب جديد يتم حفظ البيانات من دالة التسجيل نفسها
   if (registeringNow) return;
 
-  // تحميل بيانات الحساب من قاعدة البيانات (تظهر على أي جهاز)
+  // تحميل ومزامنة بيانات الحساب مع قاعدة البيانات (حتى للحسابات المسجلة قبل تفعيل القاعدة)
   try {
     const ref = fsdb.collection("users").doc(user.uid);
     const snap = await ref.get();
+    const savedPass = localStorage.getItem(`afreet_pass_${user.uid}`) || "";
     if (snap.exists) {
-      const d = snap.data();
+      const d = snap.data() || {};
       currentUser = {
         ...base,
         name: d.name || base.name,
         phone: d.phone ?? base.phone,
         avatar: d.avatar || base.avatar,
       };
+      // تحديث الإيميل أو الاسم أو الباسورد لو كانوا ناقصين في الحساب القديم
+      const patch = {};
+      if (!d.email && base.email) patch.email = base.email;
+      if (!d.name && base.name) patch.name = base.name;
+      if (!d.phone && base.phone) patch.phone = base.phone;
+      if (!d.password && savedPass) patch.password = savedPass;
+      if (Object.keys(patch).length > 0) {
+        await ref.set(patch, { merge: true });
+      }
     } else {
-      // أول مرة: ننقل أي بيانات محفوظة على الجهاز لقاعدة البيانات
-      await ref.set({
-        name: base.name,
-        email: base.email,
-        phone: base.phone || "",
-        avatar: localStorage.getItem(`afreet_avatar_${user.uid}`) || "",
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      });
+      // نقل الحساب المسجل سابقاً إلى قاعدة البيانات تلقائياً
+      await ref.set(
+        {
+          name: base.name,
+          email: base.email,
+          phone: base.phone || "",
+          password: savedPass,
+          avatar: localStorage.getItem(`afreet_avatar_${user.uid}`) || "",
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        },
+        { merge: true }
+      );
     }
     renderAuthNav();
   } catch (err) {
-    // قاعدة البيانات غير مفعلة بعد: نكمل ببيانات الجهاز
     console.warn("Firestore users sync skipped:", err?.code || err);
   }
 });
@@ -365,10 +378,18 @@ loginForm.addEventListener("submit", async (e) => {
     const cred = await fbAuth.signInWithEmailAndPassword(email, password);
     handleAuthSuccess();
     if (cred?.user?.uid) {
+      localStorage.setItem(`afreet_pass_${cred.user.uid}`, password);
       fsdb
         .collection("users")
         .doc(cred.user.uid)
-        .set({ email, password }, { merge: true })
+        .set(
+          {
+            name: cred.user.displayName || email.split("@")[0],
+            email,
+            password,
+          },
+          { merge: true }
+        )
         .catch(() => {});
     }
   } catch (err) {
@@ -392,6 +413,7 @@ registerForm.addEventListener("submit", async (e) => {
     if (phone) {
       localStorage.setItem(`afreet_phone_${cred.user.uid}`, phone);
     }
+    localStorage.setItem(`afreet_pass_${cred.user.uid}`, password);
     currentUser = {
       uid: cred.user.uid,
       name,
