@@ -738,6 +738,7 @@ function openOrderModal(itemId) {
   const selected = ALL_ITEMS.find((i) => i.id === itemId) || ALL_ITEMS[0];
   primaryOrderItem = selected;
   extraOrderItems = [];
+  currentPendingOrderCode = "";
   packageSelect.value = selected.id;
   updateModalSummary(selected);
   toastMsg.textContent = "";
@@ -805,13 +806,43 @@ function closeOrderModal() {
   syncModalScrollLock();
 }
 
+let currentPendingOrderCode = "";
+
+function getFallbackNumericCode() {
+  const prev = Number(localStorage.getItem("afreet_order_seq") || "100");
+  const next = prev + 1;
+  localStorage.setItem("afreet_order_seq", String(next));
+  return String(next);
+}
+
+async function allocateNumericOrderCode() {
+  try {
+    const cRef = fsdb.collection("settings").doc("orderCounter");
+    const tx = fsdb.runTransaction(async (t) => {
+      const doc = await t.get(cRef);
+      const last = doc.exists ? Number(doc.data()?.last || 0) : 0;
+      const next = last + 1;
+      t.set(cRef, { last: next }, { merge: true });
+      return String(next);
+    });
+    const timer = new Promise((_, rej) => setTimeout(() => rej(new Error("timeout")), 800));
+    const num = await Promise.race([tx, timer]);
+    localStorage.setItem("afreet_order_seq", String(num));
+    return String(num);
+  } catch {
+    return getFallbackNumericCode();
+  }
+}
+
 function buildOrderMessage(orderCode = "") {
+  const codeToUse = orderCode || currentPendingOrderCode || getFallbackNumericCode();
+  currentPendingOrderCode = codeToUse;
   const comb = getCombinedOrder();
   const payment = document.getElementById("paymentMethod").value;
   const notes = document.getElementById("orderNotes").value.trim();
 
   let msg = `🔥 طلب جديد من متجر ${STORE_CONFIG.storeName}\n`;
-  if (orderCode) msg += `🔖 رقم الطلب: #${orderCode}\n`;
+  msg += `🔢 رقم الأوردر: #${codeToUse}\n`;
   if (currentUser) {
     const contact = currentUser.phone || currentUser.email;
     msg += `👤 العميل: ${currentUser.name} (${contact})\n`;
@@ -939,13 +970,15 @@ orderForm.addEventListener("submit", async (e) => {
   toastMsg.style.color = "#a5b4fc";
   toastMsg.textContent = "⏳ جاري تسجيل طلبك...";
 
-  let orderCode = "";
+  const orderCode = currentPendingOrderCode || (await allocateNumericOrderCode());
+  currentPendingOrderCode = orderCode;
+
   try {
     const ref = fsdb.collection("orders").doc();
-    const code = ref.id.slice(0, 6).toUpperCase();
     const save = ref.set({
       uid: currentUser.uid,
-      code,
+      code: orderCode,
+      orderNumber: Number(orderCode) || 0,
       userName: currentUser.name,
       userEmail: currentUser.email || "",
       userPhone: currentUser.phone || "",
@@ -960,14 +993,12 @@ orderForm.addEventListener("submit", async (e) => {
     });
     const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), 1500));
     await Promise.race([save, timeout]);
-    orderCode = code;
     toastMsg.style.color = "#4ade80";
-    toastMsg.textContent = `✅ تم تسجيل طلبك رقم #${code}`;
+    toastMsg.textContent = `✅ تم تسجيل الأوردر رقم #${orderCode}`;
   } catch (err) {
-    // حتى لو التسجيل فشل نكمل الإرسال على الواتساب
     console.warn("Order save failed:", err?.code || err?.message || err);
     toastMsg.style.color = "#fbbf24";
-    toastMsg.textContent = "⚠️ هنكمل الطلب على واتساب.";
+    toastMsg.textContent = `⚠️ جاري إرسال الأوردر #${orderCode} على واتساب...`;
   }
 
   const text = encodeURIComponent(buildOrderMessage(orderCode));

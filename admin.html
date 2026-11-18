@@ -305,6 +305,9 @@
       <section id="admTabOrders" class="admin-card">
         <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px;">
           <h3 style="font-size:1.15rem;font-weight:800;">📦 سجل طلبات العملاء</h3>
+          <div class="search-box" style="width:min(300px,100%);">
+            <input type="text" id="orderSearchInp" placeholder="ابحث برقم الأوردر (مثلاً 101) أو الاسم..." />
+          </div>
           <div class="filter-tabs" id="orderFilterTabs">
             <button type="button" class="tab-btn active" data-st="all">الكل</button>
             <button type="button" class="tab-btn" data-st="pending">⏳ قيد التنفيذ</button>
@@ -675,12 +678,37 @@
       renderAdminOrders();
     });
 
+    let orderSearchQuery = "";
+    document.getElementById("orderSearchInp").addEventListener("input", (e) => {
+      orderSearchQuery = e.target.value.trim().replace(/^#/, "").toLowerCase();
+      renderAdminOrders();
+    });
+
     function renderAdminOrders() {
       const listEl = document.getElementById("adminOrdersList");
-      const filtered = allOrders.filter((o) => orderStatusFilter === "all" || (o.status || "pending") === orderStatusFilter);
+      const totalCount = allOrders.length;
+      const withNumbers = allOrders.map((o, idx) => {
+        const seqNum = totalCount - idx;
+        const isNumericCode = /^\d+$/.test(String(o.code || ""));
+        const displayNum = isNumericCode ? String(o.code) : String(seqNum);
+        return { ...o, seqNum, displayNum };
+      });
+
+      const filtered = withNumbers.filter((o) => {
+        const stOk = orderStatusFilter === "all" || (o.status || "pending") === orderStatusFilter;
+        if (!stOk) return false;
+        if (!orderSearchQuery) return true;
+        return (
+          o.displayNum.toLowerCase().includes(orderSearchQuery) ||
+          String(o.code || "").toLowerCase().includes(orderSearchQuery) ||
+          String(o.userName || "").toLowerCase().includes(orderSearchQuery) ||
+          String(o.userPhone || "").toLowerCase().includes(orderSearchQuery) ||
+          String(o.playerAccount || "").toLowerCase().includes(orderSearchQuery)
+        );
+      });
 
       if (filtered.length === 0) {
-        listEl.innerHTML = `<p class="orders-empty">📭 لا توجد طلبات في هذا التصنيف حالياً.</p>`;
+        listEl.innerHTML = `<p class="orders-empty">📭 لا توجد طلبات مطابقة حالياً.</p>`;
         return;
       }
 
@@ -692,7 +720,7 @@
           <div class="admin-order-card">
             <div class="admin-order-head">
               <div>
-                <strong style="font-size:1.02rem;color:#5eead4;">#${esc(o.code || o.id.slice(0, 6))}</strong>
+                <strong style="font-size:1.05rem;color:#5eead4;background:rgba(94,234,212,0.14);padding:3px 10px;border-radius:999px;border:1px solid rgba(94,234,212,0.35);">🔢 أوردر #${esc(o.displayNum)}</strong>
                 <span style="margin-right:8px;font-weight:800;">${esc(o.title)} — ${Number(o.price || 0).toLocaleString("en-US")} ج.م</span>
               </div>
               <span style="font-size:0.78rem;color:var(--text-secondary);">🕒 ${esc(dateStr)}</span>
