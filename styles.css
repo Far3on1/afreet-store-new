@@ -37,6 +37,9 @@
 
 html {
   scroll-behavior: smooth;
+  background-color: var(--bg-main);
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
 body {
@@ -45,6 +48,9 @@ body {
   color: var(--text-primary);
   line-height: 1.65;
   overflow-x: hidden;
+  max-width: 100%;
+  width: 100%;
+  position: relative;
   min-height: 100vh;
 }
 
@@ -2193,27 +2199,101 @@ body {
 }
 
 @media (max-width: 720px) {
+  .container {
+    width: 93%;
+  }
+
+  .hero-title {
+    font-size: 1.75rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.92rem;
+  }
+
+  .hero-stats {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    padding: 12px 10px;
+    text-align: center;
+  }
+
+  .stat-divider {
+    display: none;
+  }
+
+  .stat-value {
+    font-size: 1rem;
+  }
+
+  .stat-label {
+    font-size: 0.72rem;
+  }
+
+  .search-box {
+    width: 100%;
+  }
+
+  .games-grid,
+  .cards-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .steps-grid,
+  .support-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .price-card.ticket-card {
+    flex-direction: column;
+    border-radius: 14px;
+  }
+
   .ticket-main {
-    padding: 10px 9px;
+    padding: 11px 10px 9px;
   }
 
   .ticket-stub {
-    width: 42%;
-    min-width: 74px;
-    padding: 8px 4px;
+    width: 100%;
+    min-width: 0;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+    padding: 8px 10px;
+    border-right: none;
+    border-top: 2px dashed rgba(255, 255, 255, 0.35);
   }
 
   .ticket-price {
-    font-size: 1.3rem;
+    font-size: 1.25rem;
+  }
+
+  .ticket-cur {
+    font-size: 0.72rem;
+    margin-left: auto;
+    margin-right: 3px;
   }
 
   .price-card.ticket-card .card-title {
-    font-size: 0.86rem;
+    font-size: 0.9rem;
+    line-height: 1.3;
   }
 
-  .price-card.ticket-card .ticket-btn {
-    padding: 3px 9px;
-    font-size: 0.72rem;
+  .price-card.ticket-card .card-sub {
+    font-size: 0.7rem;
+  }
+
+  .price-card.ticket-card .ticket-btn,
+  .price-card.ticket-card:hover .ticket-btn {
+    margin-top: 0;
+    padding: 4px 10px;
+    font-size: 0.74rem;
   }
 }
 

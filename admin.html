@@ -97,14 +97,29 @@
     }
     .price-edit-row {
       display: grid;
-      grid-template-columns: 1.4fr 0.8fr 1fr auto;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.8fr) minmax(0, 1fr) auto;
       gap: 10px;
       align-items: center;
-      padding: 10px 12px;
-      border-radius: 12px;
+      padding: 12px;
+      border-radius: 14px;
       background: rgba(8, 10, 30, 0.45);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      margin-bottom: 8px;
+      margin-bottom: 10px;
+    }
+    .price-edit-row > * {
+      min-width: 0;
+    }
+    .price-edit-head {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .field-mini-lbl {
+      display: none;
+      font-size: 0.72rem;
+      color: var(--text-secondary);
+      margin-bottom: 3px;
+      font-weight: 700;
     }
     .price-edit-row input[type="number"],
     .price-edit-row input[type="text"] {
@@ -115,6 +130,20 @@
       color: #fff;
       font-size: 0.88rem;
       width: 100%;
+      min-width: 0;
+    }
+    .hide-chk-label {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      white-space: nowrap;
+      padding: 6px 10px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
     .setup-hint {
       background: rgba(251, 191, 36, 0.14);
@@ -127,8 +156,56 @@
       line-height: 1.75;
     }
     @media (max-width: 720px) {
+      .admin-wrap { padding: 18px 0 44px; }
+      .admin-card { padding: 14px 12px; border-radius: 16px; }
+      .admin-stats {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+      }
+      .admin-stat-box { padding: 10px 6px; border-radius: 12px; }
+      .admin-stat-num { font-size: 1.3rem; }
+      .admin-stat-lbl { font-size: 0.72rem; }
+      .admin-tabs {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+      }
+      .admin-tabs .tab-btn {
+        width: 100%;
+        text-align: center;
+        margin: 0 !important;
+        padding: 8px 6px;
+        font-size: 0.78rem;
+      }
       .price-edit-row {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 8px;
+        padding: 12px 10px;
+      }
+      .price-edit-head {
+        grid-column: 1 / -1;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        padding-bottom: 6px;
+      }
+      .field-mini-lbl {
+        display: block;
+      }
+      .hide-chk-label {
+        grid-column: 1 / -1;
+        width: 100%;
+      }
+      .admin-order-grid {
+        grid-template-columns: 1fr;
+        font-size: 0.8rem;
+      }
+      .admin-order-actions .status-btn {
+        flex: 1;
+        text-align: center;
+        padding: 6px 4px;
+        font-size: 0.72rem;
       }
     }
   </style>
@@ -535,19 +612,21 @@
           const isHidden = Boolean(catalogDoc.hidden[item.id]);
           return `
           <div class="price-edit-row" data-pkg-row="${esc(item.id)}">
-            <div>
+            <div class="price-edit-head">
               <strong style="font-size:0.92rem;">${esc(item.title)}</strong>
-              <span style="display:block;font-size:0.75rem;color:var(--text-secondary);">${esc(item.secLabel)}</span>
+              <span style="display:block;font-size:0.74rem;color:#5eead4;">${esc(item.secLabel)}</span>
             </div>
             <div>
+              <span class="field-mini-lbl">السعر (ج.م)</span>
               <input type="number" class="edit-price-inp" value="${curPrice}" min="1" aria-label="السعر" />
             </div>
             <div>
-              <input type="text" class="edit-tag-inp" value="${esc(curTag)}" placeholder="الشارة (مثال: الأكثر طلباً)" aria-label="الشارة" />
+              <span class="field-mini-lbl">الشارة</span>
+              <input type="text" class="edit-tag-inp" value="${esc(curTag)}" placeholder="الشارة..." aria-label="الشارة" />
             </div>
-            <label style="display:flex;align-items:center;gap:6px;font-size:0.8rem;cursor:pointer;white-space:nowrap;">
+            <label class="hide-chk-label">
               <input type="checkbox" class="edit-hide-inp" ${isHidden ? "checked" : ""} />
-              <span>إخفاء</span>
+              <span>إخفاء الباقة</span>
             </label>
           </div>`;
         })
