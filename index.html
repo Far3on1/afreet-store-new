@@ -347,9 +347,32 @@
           <div id="extraItemsList" class="extra-items-list"></div>
         </div>
 
-        <div class="form-group">
-          <label for="playerAccount">بيانات الأكونت / الـ ID</label>
-          <input type="text" id="playerAccount" required placeholder="أدخل ID اللاعب أو بيانات الحساب..." />
+        <!-- حقول الشحن عن طريق الـ ID -->
+        <div id="idFieldsWrap" class="form-group" style="display:none;">
+          <label for="playerIdInput">🆔 أي دي اللاعب (Player ID)</label>
+          <div class="input-icon-wrap">
+            <span class="input-emoji">🆔</span>
+            <input type="text" id="playerIdInput" placeholder="أدخل الـ ID الخاص بك في اللعبة..." dir="ltr" />
+          </div>
+        </div>
+
+        <!-- حقول الشحن عن طريق الأكونت (إيميل + باسورد) -->
+        <div id="accountFieldsWrap" style="display:none;flex-direction:column;gap:12px;">
+          <div class="form-group">
+            <label for="accEmailInput">📧 إيميل أو رقم حساب اللعبة</label>
+            <div class="input-icon-wrap">
+              <span class="input-emoji">📧</span>
+              <input type="text" id="accEmailInput" placeholder="إيميل أو رقم حساب اللعبة (فيسبوك / جوجل)..." dir="ltr" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="accPassInput">🔑 باسورد حساب اللعبة</label>
+            <div class="input-icon-wrap">
+              <span class="input-emoji">🔑</span>
+              <input type="password" id="accPassInput" placeholder="أدخل باسورد الحساب..." dir="ltr" />
+              <button type="button" class="toggle-pass-btn" data-target="accPassInput" aria-label="إظهار الباسورد">👁️</button>
+            </div>
+          </div>
         </div>
 
         <div class="form-group">

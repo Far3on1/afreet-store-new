@@ -658,13 +658,39 @@ profilePasswordForm.addEventListener("submit", async (e) => {
 let primaryOrderItem = null;
 let extraOrderItems = [];
 
+function isIdPackage(x) {
+  if (!x) return false;
+  return (
+    ID_OFFERS_PACKAGES.some((i) => i.id === x.id) ||
+    String(x.id || "").startsWith("id-") ||
+    String(x.title || "").toUpperCase().includes("ID") ||
+    String(x.subtitle || "").toUpperCase().includes("ID")
+  );
+}
+
 function getCombinedOrder() {
   const base = primaryOrderItem || ALL_ITEMS.find((i) => i.id === packageSelect.value) || ALL_ITEMS[0];
   const all = [base, ...extraOrderItems].filter(Boolean);
   const total = all.reduce((sum, x) => sum + (Number(x.price) || 0), 0);
   const titleText = all.map((x) => x.title).join(" + ");
   const displayTitle = all.map((x) => `${x.icon} ${x.title}`).join(" + ");
-  return { base, all, total, titleText, displayTitle };
+  const needsId = all.some((x) => isIdPackage(x));
+  const needsAccount = all.some((x) => !isIdPackage(x));
+  return { base, all, total, titleText, displayTitle, needsId, needsAccount };
+}
+
+function getAccountSummaryText(comb) {
+  const parts = [];
+  if (comb.needsId) {
+    const pid = document.getElementById("playerIdInput")?.value.trim() || "غير محدد";
+    parts.push(`الـ ID: ${pid}`);
+  }
+  if (comb.needsAccount) {
+    const em = document.getElementById("accEmailInput")?.value.trim() || "غير محدد";
+    const pw = document.getElementById("accPassInput")?.value.trim() || "غير محدد";
+    parts.push(`الإيميل: ${em} | الباسورد: ${pw}`);
+  }
+  return parts.join(" — ") || "غير محدد";
 }
 
 // Open Order Modal (Protected by Firebase Login)
@@ -717,6 +743,23 @@ function updateModalSummary(item) {
         : "➕ اختر شحنة إضافية لإضافتها مع طلبك...";
   }
   renderExtraItemsChips();
+
+  // إظهار حقول الـ ID أو حقول الأكونت (إيميل + باسورد) حسب نوع الشحنات المختارة
+  const idWrap = document.getElementById("idFieldsWrap");
+  const accWrap = document.getElementById("accountFieldsWrap");
+  const playerIdInput = document.getElementById("playerIdInput");
+  const accEmailInput = document.getElementById("accEmailInput");
+  const accPassInput = document.getElementById("accPassInput");
+
+  if (idWrap && playerIdInput) {
+    idWrap.style.display = comb.needsId ? "flex" : "none";
+    playerIdInput.required = comb.needsId;
+  }
+  if (accWrap && accEmailInput && accPassInput) {
+    accWrap.style.display = comb.needsAccount ? "flex" : "none";
+    accEmailInput.required = comb.needsAccount;
+    accPassInput.required = comb.needsAccount;
+  }
 }
 
 function closeOrderModal() {
@@ -729,7 +772,6 @@ function closeOrderModal() {
 
 function buildOrderMessage(orderCode = "") {
   const comb = getCombinedOrder();
-  const account = document.getElementById("playerAccount").value.trim() || "غير محدد";
   const payment = document.getElementById("paymentMethod").value;
   const notes = document.getElementById("orderNotes").value.trim();
 
@@ -742,7 +784,16 @@ function buildOrderMessage(orderCode = "") {
   msg += `🎮 اللعبة: فري فاير (Free Fire)\n`;
   msg += `📦 الباقات: ${comb.titleText}\n`;
   msg += `💰 الإجمالي: ${formatPrice(comb.total)} ج.م\n`;
-  msg += `🆔 بيانات الحساب / ID: ${account}\n`;
+  if (comb.needsId) {
+    const pid = document.getElementById("playerIdInput")?.value.trim() || "غير محدد";
+    msg += `🆔 أي دي اللاعب (ID): ${pid}\n`;
+  }
+  if (comb.needsAccount) {
+    const em = document.getElementById("accEmailInput")?.value.trim() || "غير محدد";
+    const pw = document.getElementById("accPassInput")?.value.trim() || "غير محدد";
+    msg += `📧 إيميل الحساب: ${em}\n`;
+    msg += `🔑 باسورد الحساب: ${pw}\n`;
+  }
   msg += `💳 وسيلة الدفع: ${payment}`;
   if (notes) msg += `\n📝 ملاحظات: ${notes}`;
   return msg;
@@ -842,7 +893,7 @@ orderForm.addEventListener("submit", async (e) => {
 
   const submitBtn = orderForm.querySelector('button[type="submit"]');
   const comb = getCombinedOrder();
-  const account = document.getElementById("playerAccount").value.trim();
+  const account = getAccountSummaryText(comb);
   const payment = document.getElementById("paymentMethod").value;
   const notes = document.getElementById("orderNotes").value.trim();
 
