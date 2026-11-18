@@ -9,65 +9,32 @@ const STORE_CONFIG = {
   complaintsNumber: "201273778131",
 };
 
-// ==========================================
-// بيانات أسعار فري فاير (جواهر أكونت)
-// ==========================================
-const DIAMOND_PACKAGES = [
-  { id: "ff-100", title: "100 جوهرة", subtitle: "شحن مباشر بالأكونت", price: 50, icon: "💎", tag: "بداية سريعة" },
-  { id: "ff-200", title: "200 جوهرة", subtitle: "شحن مباشر بالأكونت", price: 100, icon: "💎", tag: "اختيار ذكي" },
-  { id: "ff-300", title: "300 جوهرة", subtitle: "شحن مباشر بالأكونت", price: 140, icon: "💎", tag: "توفير" },
-  { id: "ff-520", title: "520 جوهرة", subtitle: "شحن مباشر بالأكونت", price: 210, icon: "💎", tag: "الأكثر طلباً", popular: true },
-  { id: "ff-1060", title: "1060 جوهرة", subtitle: "شحن مباشر بالأكونت", price: 370, icon: "💎", tag: "عرض مميز", popular: true },
-  { id: "ff-2180", title: "2180 جوهرة", subtitle: "شحن مباشر بالأكونت", price: 750, icon: "💎", tag: "قيمة عالية" },
-  { id: "ff-5600", title: "5600 جوهرة", subtitle: "شحن مباشر بالأكونت", price: 1800, icon: "💎", tag: "باقة المحترفين" },
-  { id: "ff-11200", title: "11200 جوهرة", subtitle: "شحن مباشر بالأكونت", price: 3600, icon: "💎", tag: "باقة VIP" },
-  { id: "ff-22400", title: "22400 جوهرة", subtitle: "شحن مباشر بالأكونت", price: 7000, icon: "💎", tag: "أقصى توفير", popular: true },
-];
-
-// ==========================================
-// بيانات الباقات والعضويات والدروبات
-// ==========================================
-const SPECIAL_PACKAGES = [
-  // العضويات الفردية
-  { id: "mem-lite", title: "عضوية مخففة", subtitle: "عضوية فري فاير", price: 45, category: "membership", icon: "👑", tag: "اقتصادية" },
-  { id: "mem-weekly", title: "عضوية أسبوعية", subtitle: "عضوية فري فاير", price: 85, category: "membership", icon: "👑", tag: "شائعة", popular: true },
-  { id: "mem-monthly", title: "عضوية شهرية", subtitle: "عضوية فري فاير", price: 370, category: "membership", icon: "👑", tag: "الأفضل قيمة", popular: true },
-
-  // الدروبات
-  { id: "drop-16", title: "دروب 16.99", subtitle: "دروب خاص فري فاير", price: 45, category: "drop", icon: "📦", tag: "عرض خاص" },
-  { id: "drop-49", title: "دروب 49", subtitle: "دروب خاص فري فاير", price: 50, category: "drop", icon: "📦", tag: "" },
-  { id: "drop-99", title: "دروب 99", subtitle: "دروب خاص فري فاير", price: 90, category: "drop", icon: "📦", tag: "ممتاز" },
-
-  // باقات العضويات الأسبوعية (جملة)
-  { id: "wk-5", title: "5 عضويات أسبوعية", subtitle: "باقة توفير أسبوعية", price: 400, category: "weekly-bulk", icon: "🔥", tag: "جملة" },
-  { id: "wk-10", title: "10 عضويات أسبوعية", subtitle: "باقة توفير أسبوعية", price: 770, category: "weekly-bulk", icon: "🔥", tag: "جملة" },
-  { id: "wk-20", title: "20 عضوية أسبوعية", subtitle: "باقة توفير أسبوعية", price: 1520, category: "weekly-bulk", icon: "🔥", tag: "جملة" },
-  { id: "wk-50", title: "50 عضوية أسبوعية", subtitle: "باقة تجار وكميات", price: 3750, category: "weekly-bulk", icon: "🔥", tag: "توفير كبير" },
-  { id: "wk-100", title: "100 عضوية أسبوعية", subtitle: "باقة تجار وكميات", price: 7250, category: "weekly-bulk", icon: "🔥", tag: "سعر الجملة", popular: true },
-
-  // باقات العضويات الشهرية (جملة)
-  { id: "mo-5", title: "5 عضويات شهرية", subtitle: "باقة توفير شهرية", price: 1850, category: "monthly-bulk", icon: "⚡", tag: "جملة" },
-  { id: "mo-10", title: "10 عضويات شهرية", subtitle: "باقة توفير شهرية", price: 3550, category: "monthly-bulk", icon: "⚡", tag: "جملة" },
-  { id: "mo-50", title: "50 عضوية شهرية", subtitle: "باقة تجار وكميات", price: 17250, category: "monthly-bulk", icon: "⚡", tag: "توفير كبير" },
-  { id: "mo-100", title: "100 عضوية شهرية", subtitle: "باقة تجار وكميات", price: 33500, category: "monthly-bulk", icon: "⚡", tag: "سعر الجملة", popular: true },
-];
-
-// ==========================================
-// بيانات عروض فري فاير (شحن عن طريق الـ ID)
-// ==========================================
-const ID_OFFERS_PACKAGES = [
-  { id: "id-110", title: "110 جوهرة (ID)", subtitle: "شحن مباشر بالـ ID فقط", price: 55, icon: "🆔", tag: "سريع" },
-  { id: "id-220", title: "220 جوهرة (ID)", subtitle: "شحن مباشر بالـ ID فقط", price: 110, icon: "🆔", tag: "" },
-  { id: "id-341", title: "341 جوهرة (ID)", subtitle: "شحن مباشر بالـ ID فقط", price: 170, icon: "🆔", tag: "عرض مميز" },
-  { id: "id-520", title: "520 جوهرة (ID)", subtitle: "شحن مباشر بالـ ID فقط", price: 280, icon: "🆔", tag: "الأكثر طلباً", popular: true },
-  { id: "id-1060", title: "1060 جوهرة (ID)", subtitle: "شحن مباشر بالـ ID فقط", price: 490, icon: "🆔", tag: "ممتاز", popular: true },
-  { id: "id-2120", title: "2120 جوهرة (ID)", subtitle: "شحن مباشر بالـ ID فقط", price: 980, icon: "🆔", tag: "قيمة عالية" },
-  { id: "id-5300", title: "5300 جوهرة (ID)", subtitle: "شحن مباشر بالـ ID فقط", price: 2350, icon: "🆔", tag: "باقة VIP" },
-  { id: "id-weekly", title: "عضوية أسبوعية (ID)", subtitle: "تفعيل بالـ ID فقط", price: 120, icon: "👑", tag: "شحن بالـ ID" },
-  { id: "id-monthly", title: "عضوية شهرية (ID)", subtitle: "تفعيل بالـ ID فقط", price: 540, icon: "👑", tag: "شحن بالـ ID", popular: true },
-];
 
 const ALL_ITEMS = [...DIAMOND_PACKAGES, ...ID_OFFERS_PACKAGES, ...SPECIAL_PACKAGES];
+
+// حماية من حقن HTML في النصوص القادمة من المستخدمين / لوحة التحكم
+function esc(value) {
+  return String(value ?? "").replace(/[&<>"']/g, (ch) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;",
+  }[ch]));
+}
+
+// دمج تعديلات الأسعار (من لوحة التحكم) فوق البيانات الأصلية
+function applyCatalog(overrides) {
+  const eff = buildEffectiveCatalog(overrides);
+  DIAMOND_PACKAGES.splice(0, DIAMOND_PACKAGES.length, ...eff.diamonds);
+  ID_OFFERS_PACKAGES.splice(0, ID_OFFERS_PACKAGES.length, ...eff.id);
+  SPECIAL_PACKAGES.splice(0, SPECIAL_PACKAGES.length, ...eff.special);
+  ALL_ITEMS.splice(0, ALL_ITEMS.length, ...DIAMOND_PACKAGES, ...ID_OFFERS_PACKAGES, ...SPECIAL_PACKAGES);
+  populatePackageSelect();
+  renderDiamonds();
+  renderIdOffers();
+  renderPackages();
+}
 
 // ==========================================
 // DOM Elements
@@ -115,14 +82,14 @@ function ticketCard(item, extraClass) {
   return `
       <article class="price-card ticket-card ${extraClass} ${item.popular ? "popular" : ""}">
         <div class="ticket-main">
-          ${item.tag ? `<span class="ticket-tag">${item.tag}</span>` : ""}
-          <h3 class="card-title">${item.icon} ${item.title}</h3>
-          <p class="card-sub">${item.subtitle}</p>
+          ${item.tag ? `<span class="ticket-tag">${esc(item.tag)}</span>` : ""}
+          <h3 class="card-title">${esc(item.icon)} ${esc(item.title)}</h3>
+          <p class="card-sub">${esc(item.subtitle)}</p>
         </div>
         <div class="ticket-stub">
           <span class="ticket-price">${formatPrice(item.price)}</span>
           <span class="ticket-cur">ج.م</span>
-          <button class="card-btn ticket-btn" data-id="${item.id}">اطلب ←</button>
+          <button class="card-btn ticket-btn" data-id="${esc(item.id)}">اطلب ←</button>
         </div>
       </article>
     `;
@@ -194,6 +161,7 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const fbAuth = firebase.auth();
+const fsdb = firebase.firestore();
 
 const authNavArea = document.getElementById("authNavArea");
 const authModal = document.getElementById("authModal");
@@ -229,21 +197,57 @@ function getSavedAvatar(uid, fallbackUrl) {
   return localStorage.getItem(`afreet_avatar_${uid}`) || fallbackUrl || "assets/afreet-logo.jpg";
 }
 
-fbAuth.onAuthStateChanged((user) => {
-  if (user) {
-    const isGoogle = user.providerData?.some((p) => p.providerId === "google.com");
-    currentUser = {
-      uid: user.uid,
-      name: user.displayName || (user.email ? user.email.split("@")[0] : "عميل عفريت"),
-      email: user.email || "",
-      phone: getSavedPhone(user.uid),
-      avatar: getSavedAvatar(user.uid, user.photoURL),
-      isGoogle,
-    };
-  } else {
+let registeringNow = false;
+
+fbAuth.onAuthStateChanged(async (user) => {
+  if (!user) {
     currentUser = null;
+    renderAuthNav();
+    return;
   }
+
+  const isGoogle = user.providerData?.some((p) => p.providerId === "google.com");
+  const base = {
+    uid: user.uid,
+    name: user.displayName || (user.email ? user.email.split("@")[0] : "عميل عفريت"),
+    email: user.email || "",
+    phone: getSavedPhone(user.uid),
+    avatar: getSavedAvatar(user.uid, user.photoURL),
+    isGoogle,
+  };
+  currentUser = base;
   renderAuthNav();
+
+  // أثناء إنشاء حساب جديد يتم حفظ البيانات من دالة التسجيل نفسها
+  if (registeringNow) return;
+
+  // تحميل بيانات الحساب من قاعدة البيانات (تظهر على أي جهاز)
+  try {
+    const ref = fsdb.collection("users").doc(user.uid);
+    const snap = await ref.get();
+    if (snap.exists) {
+      const d = snap.data();
+      currentUser = {
+        ...base,
+        name: d.name || base.name,
+        phone: d.phone ?? base.phone,
+        avatar: d.avatar || base.avatar,
+      };
+    } else {
+      // أول مرة: ننقل أي بيانات محفوظة على الجهاز لقاعدة البيانات
+      await ref.set({
+        name: base.name,
+        email: base.email,
+        phone: base.phone || "",
+        avatar: localStorage.getItem(`afreet_avatar_${user.uid}`) || "",
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+    }
+    renderAuthNav();
+  } catch (err) {
+    // قاعدة البيانات غير مفعلة بعد: نكمل ببيانات الجهاز
+    console.warn("Firestore users sync skipped:", err?.code || err);
+  }
 });
 
 function renderAuthNav() {
@@ -251,8 +255,8 @@ function renderAuthNav() {
     authNavArea.innerHTML = `
       <div class="user-pill">
         <button type="button" class="user-pill-trigger" id="openProfileBtn" title="فتح الملف الشخصي">
-          <img class="user-pill-avatar" src="${currentUser.avatar}" alt="${currentUser.name}" />
-          <span class="user-pill-name">${currentUser.name}</span>
+          <img class="user-pill-avatar" src="${esc(currentUser.avatar)}" alt="${esc(currentUser.name)}" />
+          <span class="user-pill-name">${esc(currentUser.name)}</span>
           <span class="verified-badge" title="حساب موثق">
             <svg viewBox="0 0 24 24" fill="none">
               <circle cx="12" cy="12" r="10" fill="#0095F6"/>
@@ -355,6 +359,7 @@ registerForm.addEventListener("submit", async (e) => {
   const phone = document.getElementById("regPhone").value.trim();
   const password = document.getElementById("regPassword").value;
 
+  registeringNow = true;
   try {
     const cred = await fbAuth.createUserWithEmailAndPassword(email, password);
     await cred.user.updateProfile({ displayName: name });
@@ -371,8 +376,25 @@ registerForm.addEventListener("submit", async (e) => {
     };
     renderAuthNav();
     handleAuthSuccess();
+    // حفظ بيانات الحساب في قاعدة البيانات
+    try {
+      await fsdb.collection("users").doc(cred.user.uid).set(
+        {
+          name,
+          email,
+          phone,
+          avatar: "",
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        },
+        { merge: true }
+      );
+    } catch (dbErr) {
+      console.warn("Firestore user save skipped:", dbErr?.code || dbErr);
+    }
   } catch (err) {
     registerError.textContent = mapFirebaseError(err);
+  } finally {
+    registeringNow = false;
   }
 });
 
@@ -393,6 +415,8 @@ const profileInfoMsg = document.getElementById("profileInfoMsg");
 const profilePassMsg = document.getElementById("profilePassMsg");
 const googlePassNote = document.getElementById("googlePassNote");
 const passwordFieldsWrap = document.getElementById("passwordFieldsWrap");
+const profileOrdersPanel = document.getElementById("profileOrdersPanel");
+const profileOrdersList = document.getElementById("profileOrdersList");
 
 function openProfileModal() {
   if (!currentUser) return;
@@ -400,6 +424,12 @@ function openProfileModal() {
   profileModalTitle.textContent = currentUser.name;
   profileEmailText.textContent = currentUser.email || "حساب عفريت";
   profileProviderBadge.textContent = currentUser.isGoogle ? "مسجل بحساب جوجل (Gmail)" : "مسجل بالإيميل";
+
+  // الرجوع لتبويب البيانات الشخصية عند كل فتح
+  profileTabs.forEach((t) => t.classList.toggle("active", t.dataset.profileTab === "info"));
+  profileInfoForm.style.display = "flex";
+  profilePasswordForm.style.display = "none";
+  profileOrdersPanel.style.display = "none";
 
   document.getElementById("profName").value = currentUser.name;
   document.getElementById("profPhone").value = currentUser.phone || "";
@@ -439,10 +469,61 @@ profileTabs.forEach((tab) => {
     const target = tab.dataset.profileTab;
     profileInfoForm.style.display = target === "info" ? "flex" : "none";
     profilePasswordForm.style.display = target === "security" ? "flex" : "none";
+    profileOrdersPanel.style.display = target === "orders" ? "block" : "none";
     profileInfoMsg.textContent = "";
     profilePassMsg.textContent = "";
+    if (target === "orders") loadMyOrders();
   });
 });
+
+// ---------- طلباتي ----------
+const ORDER_STATUS = {
+  pending: { label: "⏳ قيد التنفيذ", cls: "st-pending" },
+  done: { label: "✅ تم الشحن", cls: "st-done" },
+  cancelled: { label: "❌ ملغي", cls: "st-cancelled" },
+};
+
+function formatOrderDate(ts) {
+  const d = ts && typeof ts.toDate === "function" ? ts.toDate() : null;
+  if (!d) return "الآن";
+  return d.toLocaleString("ar-EG", { dateStyle: "medium", timeStyle: "short" });
+}
+
+async function loadMyOrders() {
+  if (!currentUser) return;
+  profileOrdersList.innerHTML = `<p class="orders-empty">جاري تحميل طلباتك...</p>`;
+  try {
+    const snap = await fsdb.collection("orders").where("uid", "==", currentUser.uid).get();
+    const orders = snap.docs
+      .map((d) => ({ id: d.id, ...d.data() }))
+      .sort((a, b) => (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0));
+
+    if (orders.length === 0) {
+      profileOrdersList.innerHTML = `<p class="orders-empty">📭 لسه معملتش أي طلب. اختار باقتك واطلب دلوقتي!</p>`;
+      return;
+    }
+
+    profileOrdersList.innerHTML = orders
+      .map((o) => {
+        const st = ORDER_STATUS[o.status] || ORDER_STATUS.pending;
+        return `
+        <div class="order-item">
+          <div class="order-item-top">
+            <strong>${esc(o.title)}</strong>
+            <span class="order-status ${st.cls}">${st.label}</span>
+          </div>
+          <div class="order-item-meta">
+            <span>🔖 #${esc(o.code || "")}</span>
+            <span>💰 ${formatPrice(Number(o.price) || 0)} ج.م</span>
+            <span>🕒 ${esc(formatOrderDate(o.createdAt))}</span>
+          </div>
+        </div>`;
+      })
+      .join("");
+  } catch (err) {
+    profileOrdersList.innerHTML = `<p class="orders-empty">⚠️ تعذر تحميل الطلبات حالياً.</p>`;
+  }
+}
 
 // Upload & Resize Avatar Image
 avatarUpload.addEventListener("change", (e) => {
@@ -471,6 +552,14 @@ avatarUpload.addEventListener("change", (e) => {
       renderAuthNav();
       profileInfoMsg.style.color = "#4ade80";
       profileInfoMsg.textContent = "✅ تم تحديث صورة الحساب!";
+      fsdb
+        .collection("users")
+        .doc(currentUser.uid)
+        .set({ avatar: dataUrl }, { merge: true })
+        .catch(() => {
+          profileInfoMsg.style.color = "#fbbf24";
+          profileInfoMsg.textContent = "⚠️ الصورة اتحفظت على جهازك بس، مش على الحساب.";
+        });
     };
     img.src = ev.target.result;
   };
@@ -497,6 +586,12 @@ profileInfoForm.addEventListener("submit", async (e) => {
     renderAuthNav();
     profileInfoMsg.style.color = "#4ade80";
     profileInfoMsg.textContent = "✅ تم حفظ بياناتك بنجاح!";
+    try {
+      await fsdb.collection("users").doc(currentUser.uid).set({ name: newName, phone: newPhone }, { merge: true });
+    } catch (dbErr) {
+      profileInfoMsg.style.color = "#fbbf24";
+      profileInfoMsg.textContent = "⚠️ البيانات اتحفظت على جهازك بس، مش على الحساب.";
+    }
   } catch (err) {
     profileInfoMsg.style.color = "#ff6b6b";
     profileInfoMsg.textContent = mapFirebaseError(err);
@@ -560,13 +655,14 @@ function closeOrderModal() {
   syncModalScrollLock();
 }
 
-function buildOrderMessage() {
+function buildOrderMessage(orderCode = "") {
   const selected = ALL_ITEMS.find((i) => i.id === packageSelect.value) || ALL_ITEMS[0];
   const account = document.getElementById("playerAccount").value.trim() || "غير محدد";
   const payment = document.getElementById("paymentMethod").value;
   const notes = document.getElementById("orderNotes").value.trim();
 
   let msg = `🔥 طلب جديد من متجر ${STORE_CONFIG.storeName}\n`;
+  if (orderCode) msg += `🔖 رقم الطلب: #${orderCode}\n`;
   if (currentUser) {
     const contact = currentUser.phone || currentUser.email;
     msg += `👤 العميل: ${currentUser.name} (${contact})\n`;
@@ -616,16 +712,66 @@ packageSelect.addEventListener("change", () => {
   if (item) updateModalSummary(item);
 });
 
-orderForm.addEventListener("submit", (e) => {
+orderForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   if (!currentUser) {
     closeOrderModal();
     openAuthModal(true);
     return;
   }
-  const text = encodeURIComponent(buildOrderMessage());
+
+  const submitBtn = orderForm.querySelector('button[type="submit"]');
+  const selected = ALL_ITEMS.find((i) => i.id === packageSelect.value) || ALL_ITEMS[0];
+  const account = document.getElementById("playerAccount").value.trim();
+  const payment = document.getElementById("paymentMethod").value;
+  const notes = document.getElementById("orderNotes").value.trim();
+
+  // نفتح نافذة الواتساب فوراً (داخل ضغطة المستخدم) عشان المتصفح ما يمنعها
+  const popup = window.open("about:blank", "_blank");
+
+  submitBtn.disabled = true;
+  toastMsg.style.color = "#a5b4fc";
+  toastMsg.textContent = "⏳ جاري تسجيل طلبك...";
+
+  let orderCode = "";
+  try {
+    const ref = fsdb.collection("orders").doc();
+    const code = ref.id.slice(0, 6).toUpperCase();
+    const save = ref.set({
+      uid: currentUser.uid,
+      code,
+      userName: currentUser.name,
+      userEmail: currentUser.email || "",
+      userPhone: currentUser.phone || "",
+      itemId: selected.id,
+      title: selected.title,
+      price: selected.price,
+      playerAccount: account,
+      paymentMethod: payment,
+      notes,
+      status: "pending",
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+    const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), 8000));
+    await Promise.race([save, timeout]);
+    orderCode = code;
+    toastMsg.style.color = "#4ade80";
+    toastMsg.textContent = `✅ تم تسجيل طلبك رقم #${code}`;
+  } catch (err) {
+    // حتى لو التسجيل فشل نكمل الإرسال على الواتساب
+    console.warn("Order save failed:", err?.code || err?.message || err);
+    toastMsg.style.color = "#fbbf24";
+    toastMsg.textContent = "⚠️ هنكمل الطلب على واتساب.";
+  }
+
+  const text = encodeURIComponent(buildOrderMessage(orderCode));
   const url = `https://wa.me/${STORE_CONFIG.whatsappNumber}?text=${text}`;
-  window.open(url, "_blank", "noopener,noreferrer");
+  if (popup) {
+    popup.location.href = url;
+  } else {
+    window.location.href = url;
+  }
+  submitBtn.disabled = false;
 });
 
 copyOrderBtn.addEventListener("click", async () => {
@@ -771,3 +917,22 @@ populatePackageSelect();
 renderDiamonds();
 renderIdOffers();
 renderPackages();
+
+// مزامنة الأسعار والباقات مباشرة من لوحة التحكم (Firestore)
+try {
+  fsdb
+    .collection("settings")
+    .doc("catalog")
+    .onSnapshot(
+      (doc) => {
+        if (doc.exists) {
+          applyCatalog(doc.data());
+        }
+      },
+      (err) => {
+        console.warn("Catalog live sync skipped:", err?.code || err);
+      }
+    );
+} catch (err) {
+  console.warn("Catalog init skipped:", err);
+}

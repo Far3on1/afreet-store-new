@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>لوحة تحكم عفريت ستور | الإدارة</title>
+  <link rel="icon" type="image/jpeg" href="assets/afreet-logo.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Changa:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .admin-wrap { padding: 32px 0 64px; }
+    .admin-card {
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 20px;
+      padding: 22px;
+      margin-bottom: 18px;
+    }
+    .admin-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .admin-stat-box {
+      background: rgba(8, 10, 30, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      padding: 14px 16px;
+      text-align: center;
+    }
+    .admin-stat-num {
+      font-family: "Changa", sans-serif;
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: #5eead4;
+      display: block;
+    }
+    .admin-stat-lbl { font-size: 0.82rem; color: var(--text-secondary); }
+    .admin-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .admin-order-card {
+      background: rgba(8, 10, 30, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .admin-order-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .admin-order-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 8px;
+      font-size: 0.86rem;
+      color: var(--text-secondary);
+      background: rgba(255, 255, 255, 0.04);
+      padding: 10px 12px;
+      border-radius: 12px;
+    }
+    .admin-order-grid strong { color: var(--text-primary); }
+    .admin-order-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+    .status-btn {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-primary);
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .status-btn.active {
+      background: linear-gradient(135deg, #6366f1 0%, #14b8a6 100%);
+      border-color: transparent;
+    }
+    .price-edit-row {
+      display: grid;
+      grid-template-columns: 1.4fr 0.8fr 1fr auto;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(8, 10, 30, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 8px;
+    }
+    .price-edit-row input[type="number"],
+    .price-edit-row input[type="text"] {
+      padding: 8px 10px;
+      border-radius: 10px;
+      background: #0b1026;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: #fff;
+      font-size: 0.88rem;
+      width: 100%;
+    }
+    .setup-hint {
+      background: rgba(251, 191, 36, 0.14);
+      border: 1px solid rgba(251, 191, 36, 0.4);
+      color: #fde68a;
+      padding: 14px 16px;
+      border-radius: 14px;
+      font-size: 0.88rem;
+      margin-bottom: 16px;
+      line-height: 1.75;
+    }
+    @media (max-width: 720px) {
+      .price-edit-row {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand">
+        <div class="brand-logo"><img src="assets/afreet-logo.jpg" alt="عفريت" /></div>
+        <div class="brand-text">
+          <span class="brand-name">لوحة تحكم عفريت</span>
+          <span class="brand-tag">ADMIN PANEL</span>
+        </div>
+      </a>
+      <div class="nav-actions">
+        <a href="index.html" class="btn btn-glass btn-sm">العودة للموقع ←</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container admin-wrap">
+    <!-- شاشة تسجيل دخول المدير -->
+    <div id="adminLoginBox" class="admin-card" style="max-width:460px;margin:24px auto;">
+      <h2 style="font-size:1.3rem;font-weight:800;margin-bottom:6px;">🔐 دخول لوحة الإدارة</h2>
+      <p style="font-size:0.86rem;color:var(--text-secondary);margin-bottom:16px;">سجل بحساب المدير لإدارة الطلبات وتعديل الأسعار والباقات</p>
+      <form id="adminLoginForm" class="order-form">
+        <div class="form-group">
+          <label for="admEmail">الإيميل</label>
+          <input type="email" id="admEmail" required placeholder="example@gmail.com" dir="ltr" />
+        </div>
+        <div class="form-group">
+          <label for="admPass">كلمة المرور</label>
+          <input type="password" id="admPass" required placeholder="••••••••" dir="ltr" />
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg full-width">دخول لوحة التحكم</button>
+        <p class="auth-error" id="admLoginErr"></p>
+      </form>
+    </div>
+
+    <!-- شاشة تفعيل حساب المدير لأول مرة -->
+    <div id="adminClaimBox" class="admin-card" style="display:none;max-width:520px;margin:24px auto;text-align:center;">
+      <h2 style="font-size:1.3rem;font-weight:800;margin-bottom:8px;">👑 تفعيل حساب مدير المتجر</h2>
+      <p style="font-size:0.9rem;color:var(--text-secondary);margin-bottom:16px;">
+        أنت مسجل الدخول الآن بحساب: <strong id="claimEmailText" style="color:#5eead4;"></strong><br/>
+        اضغط الزر بالأسفل لربط هذا الحساب كمدير وحيد لمتجر عفريت.
+      </p>
+      <button type="button" id="claimAdminBtn" class="btn btn-primary btn-lg">👑 تعيين حسابي كمدير للمتجر</button>
+      <p class="toast-msg" id="claimMsg" style="margin-top:10px;"></p>
+    </div>
+
+    <!-- لوحة الإدارة الكاملة -->
+    <div id="adminDashboard" style="display:none;">
+      <div id="firestoreHint" class="setup-hint" style="display:none;">
+        ⚠️ <strong>تنبيه هام لتفعيل قاعدة البيانات لأول مرة:</strong><br/>
+        لتخزين الطلبات وتعديلات الأسعار على السحابة، افتح <a href="https://console.firebase.google.com/project/afreet-store/firestore" target="_blank" style="text-decoration:underline;color:#fff;font-weight:800;">Firebase Firestore من هنا</a> واضغط <strong>Create database</strong> ⬅️ اختر <strong>Start in test mode</strong> (أو ضع صلاحيات القراءة والكتابة) واضغط <strong>Create</strong>.
+      </div>
+
+      <div class="admin-stats">
+        <div class="admin-stat-box">
+          <span class="admin-stat-num" id="statTotal">0</span>
+          <span class="admin-stat-lbl">إجمالي الطلبات</span>
+        </div>
+        <div class="admin-stat-box">
+          <span class="admin-stat-num" id="statPending">0</span>
+          <span class="admin-stat-lbl">⏳ قيد التنفيذ</span>
+        </div>
+        <div class="admin-stat-box">
+          <span class="admin-stat-num" id="statDone">0</span>
+          <span class="admin-stat-lbl">✅ تم الشحن</span>
+        </div>
+      </div>
+
+      <div class="admin-tabs">
+        <button type="button" class="tab-btn active" data-adm-tab="orders">📦 إدارة الطلبات</button>
+        <button type="button" class="tab-btn" data-adm-tab="prices">💰 تعديل الأسعار والشارات</button>
+        <button type="button" class="tab-btn" data-adm-tab="add">➕ إضافة باقة جديدة</button>
+        <button type="button" id="admLogoutBtn" class="tab-btn" style="margin-right:auto;">تسجيل الخروج</button>
+      </div>
+
+      <!-- تبويب 1: الطلبات -->
+      <section id="admTabOrders" class="admin-card">
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px;">
+          <h3 style="font-size:1.15rem;font-weight:800;">📦 سجل طلبات العملاء</h3>
+          <div class="filter-tabs" id="orderFilterTabs">
+            <button type="button" class="tab-btn active" data-st="all">الكل</button>
+            <button type="button" class="tab-btn" data-st="pending">⏳ قيد التنفيذ</button>
+            <button type="button" class="tab-btn" data-st="done">✅ تم الشحن</button>
+            <button type="button" class="tab-btn" data-st="cancelled">❌ ملغي</button>
+          </div>
+        </div>
+        <div id="adminOrdersList"></div>
+      </section>
+
+      <!-- تبويب 2: تعديل الأسعار -->
+      <section id="admTabPrices" class="admin-card" style="display:none;">
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px;">
+          <div>
+            <h3 style="font-size:1.15rem;font-weight:800;">💰 تعديل الأسعار والشارات</h3>
+            <p style="font-size:0.82rem;color:var(--text-secondary);">عدّل أي سعر أو شارة أو أخفِ أي باقة ثم اضغط "حفظ كل التعديلات" ليظهر التحديث فوراً في الموقع</p>
+          </div>
+          <button type="button" id="saveCatalogBtn" class="btn btn-primary btn-sm">💾 حفظ كل التعديلات</button>
+        </div>
+        <p class="toast-msg" id="saveCatalogMsg"></p>
+        <div id="catalogEditorList"></div>
+      </section>
+
+      <!-- تبويب 3: إضافة باقة جديدة -->
+      <section id="admTabAdd" class="admin-card" style="display:none;">
+        <h3 style="font-size:1.15rem;font-weight:800;margin-bottom:12px;">➕ إضافة باقة جديدة للموقع</h3>
+        <form id="addPkgForm" class="order-form" style="max-width:540px;">
+          <div class="form-group">
+            <label for="newSection">القسم</label>
+            <select id="newSection">
+              <option value="diamonds">💎 جواهر فري فاير (بالأكونت)</option>
+              <option value="id">🆔 عروض فري فاير (بالـ ID)</option>
+              <option value="special">👑 الباقات والعضويات والدروبات</option>
+            </select>
+          </div>
+          <div class="form-group" id="newCatWrap" style="display:none;">
+            <label for="newCategory">تصنيف الباقة</label>
+            <select id="newCategory">
+              <option value="membership">العضويات الفردية</option>
+              <option value="drop">الدروبات</option>
+              <option value="weekly-bulk">باقات أسبوعية (جملة)</option>
+              <option value="monthly-bulk">باقات شهرية (جملة)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="newTitle">اسم الباقة (مثال: 500 جوهرة أو عرض خاص)</label>
+            <input type="text" id="newTitle" required placeholder="اكتب اسم الباقة..." />
+          </div>
+          <div class="form-group">
+            <label for="newSubtitle">الوصف تحت الاسم</label>
+            <input type="text" id="newSubtitle" required value="شحن مباشر بالأكونت" />
+          </div>
+          <div class="form-group">
+            <label for="newPrice">السعر (ج.م)</label>
+            <input type="number" id="newPrice" required min="1" placeholder="150" />
+          </div>
+          <div class="form-group">
+            <label for="newTag">الشارة (اختياري — مثال: عرض ناري)</label>
+            <input type="text" id="newTag" placeholder="عرض مميز" />
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg">➕ إضافة الباقة الآن</button>
+          <p class="toast-msg" id="addPkgMsg"></p>
+        </form>
+
+        <div style="margin-top:26px;">
+          <h4 style="font-size:1rem;font-weight:800;margin-bottom:10px;">الباقات المضافة من لوحة التحكم:</h4>
+          <div id="customPkgsList"></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+  <script src="catalog-data.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCvmCSH2322rtLVIJ_KkTtChU52ExSH-Vg",
+      authDomain: "afreet-store.firebaseapp.com",
+      projectId: "afreet-store",
+      storageBucket: "afreet-store.firebasestorage.app",
+      messagingSenderId: "334257538872",
+      appId: "1:334257538872:web:e5792d4924d70fa15f63cd",
+      measurementId: "G-BFDR1YVR2L",
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    const esc = (v) =>
+      String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+    const adminLoginBox = document.getElementById("adminLoginBox");
+    const adminClaimBox = document.getElementById("adminClaimBox");
+    const adminDashboard = document.getElementById("adminDashboard");
+    const firestoreHint = document.getElementById("firestoreHint");
+
+    let allOrders = [];
+    let orderStatusFilter = "all";
+    let catalogDoc = { prices: {}, tags: {}, hidden: {}, custom: [] };
+    let ordersUnsub = null;
+
+    auth.onAuthStateChanged(async (user) => {
+      if (!user) {
+        if (ordersUnsub) { ordersUnsub(); ordersUnsub = null; }
+        adminLoginBox.style.display = "block";
+        adminClaimBox.style.display = "none";
+        adminDashboard.style.display = "none";
+        return;
+      }
+
+      adminLoginBox.style.display = "none";
+      try {
+        const admSnap = await db.collection("settings").doc("admin").get();
+        if (!admSnap.exists || !admSnap.data()?.ownerUid) {
+          document.getElementById("claimEmailText").textContent = user.email || user.uid;
+          adminClaimBox.style.display = "block";
+          adminDashboard.style.display = "none";
+          return;
+        }
+        if (admSnap.data().ownerUid !== user.uid) {
+          adminClaimBox.style.display = "block";
+          adminClaimBox.innerHTML = `<h3 style="color:#fca5a5;">🔒 غير مصرح لهذا الحساب (${esc(user.email)}) بدخول لوحة الإدارة</h3>
+            <button type="button" onclick="firebase.auth().signOut()" class="btn btn-glass btn-sm" style="margin-top:12px;">تسجيل الخروج</button>`;
+          adminDashboard.style.display = "none";
+          return;
+        }
+        startDashboard();
+      } catch (err) {
+        // إذا كانت قاعدة البيانات غير مفعلة بعد، نفتح اللوحة مع إظهار تنبيه التفعيل
+        firestoreHint.style.display = "block";
+        startDashboard();
+      }
+    });
+
+    document.getElementById("adminLoginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const errEl = document.getElementById("admLoginErr");
+      errEl.textContent = "";
+      try {
+        await auth.signInWithEmailAndPassword(
+          document.getElementById("admEmail").value.trim(),
+          document.getElementById("admPass").value
+        );
+      } catch (err) {
+        errEl.textContent = "❌ الإيميل أو كلمة المرور غير صحيحة";
+      }
+    });
+
+    document.getElementById("claimAdminBtn").addEventListener("click", async () => {
+      const user = auth.currentUser;
+      if (!user) return;
+      const msg = document.getElementById("claimMsg");
+      try {
+        await db.collection("settings").doc("admin").set({
+          ownerUid: user.uid,
+          ownerEmail: user.email || "",
+          claimedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        });
+        adminClaimBox.style.display = "none";
+        startDashboard();
+      } catch (err) {
+        firestoreHint.style.display = "block";
+        msg.style.color = "#fbbf24";
+        msg.textContent = "⚠️ يرجى تفعيل Firestore أولاً من الرابط بالأعلى ثم الضغط مرة أخرى.";
+      }
+    });
+
+    document.getElementById("admLogoutBtn").addEventListener("click", () => auth.signOut());
+
+    // التبديل بين تبويبات الإدارة
+    document.querySelectorAll("[data-adm-tab]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("[data-adm-tab]").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        const t = btn.dataset.admTab;
+        document.getElementById("admTabOrders").style.display = t === "orders" ? "block" : "none";
+        document.getElementById("admTabPrices").style.display = t === "prices" ? "block" : "none";
+        document.getElementById("admTabAdd").style.display = t === "add" ? "block" : "none";
+      });
+    });
+
+    async function startDashboard() {
+      adminClaimBox.style.display = "none";
+      adminDashboard.style.display = "block";
+
+      // الاستماع اللحظي للطلبات
+      try {
+        ordersUnsub = db.collection("orders").onSnapshot(
+          (snap) => {
+            allOrders = snap.docs
+              .map((d) => ({ id: d.id, ...d.data() }))
+              .sort((a, b) => (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0));
+            updateOrderStats();
+            renderAdminOrders();
+          },
+          () => {
+            firestoreHint.style.display = "block";
+          }
+        );
+      } catch {
+        firestoreHint.style.display = "block";
+      }
+
+      // تحميل إعدادات الأسعار والباقات
+      try {
+        const catSnap = await db.collection("settings").doc("catalog").get();
+        if (catSnap.exists) {
+          const d = catSnap.data() || {};
+          catalogDoc = {
+            prices: d.prices || {},
+            tags: d.tags || {},
+            hidden: d.hidden || {},
+            custom: Array.isArray(d.custom) ? d.custom : [],
+          };
+        }
+      } catch {
+        firestoreHint.style.display = "block";
+      }
+      renderCatalogEditor();
+      renderCustomPkgs();
+    }
+
+    function updateOrderStats() {
+      document.getElementById("statTotal").textContent = allOrders.length;
+      document.getElementById("statPending").textContent = allOrders.filter((o) => (o.status || "pending") === "pending").length;
+      document.getElementById("statDone").textContent = allOrders.filter((o) => o.status === "done").length;
+    }
+
+    document.getElementById("orderFilterTabs").addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-st]");
+      if (!btn) return;
+      document.querySelectorAll("#orderFilterTabs .tab-btn").forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      orderStatusFilter = btn.dataset.st;
+      renderAdminOrders();
+    });
+
+    function renderAdminOrders() {
+      const listEl = document.getElementById("adminOrdersList");
+      const filtered = allOrders.filter((o) => orderStatusFilter === "all" || (o.status || "pending") === orderStatusFilter);
+
+      if (filtered.length === 0) {
+        listEl.innerHTML = `<p class="orders-empty">📭 لا توجد طلبات في هذا التصنيف حالياً.</p>`;
+        return;
+      }
+
+      listEl.innerHTML = filtered
+        .map((o) => {
+          const st = o.status || "pending";
+          const dateStr = o.createdAt?.toDate ? o.createdAt.toDate().toLocaleString("ar-EG") : "الآن";
+          return `
+          <div class="admin-order-card">
+            <div class="admin-order-head">
+              <div>
+                <strong style="font-size:1.02rem;color:#5eead4;">#${esc(o.code || o.id.slice(0, 6))}</strong>
+                <span style="margin-right:8px;font-weight:800;">${esc(o.title)} — ${Number(o.price || 0).toLocaleString("en-US")} ج.م</span>
+              </div>
+              <span style="font-size:0.78rem;color:var(--text-secondary);">🕒 ${esc(dateStr)}</span>
+            </div>
+            <div class="admin-order-grid">
+              <div>👤 العميل: <strong>${esc(o.userName || "—")}</strong></div>
+              <div>📱 التواصل: <strong dir="ltr">${esc(o.userPhone || o.userEmail || "—")}</strong></div>
+              <div>🆔 الحساب/ID: <strong>${esc(o.playerAccount || "—")}</strong></div>
+              <div>💳 الدفع: <strong>${esc(o.paymentMethod || "—")}</strong></div>
+              ${o.notes ? `<div style="grid-column:1/-1;">📝 ملاحظات: <strong>${esc(o.notes)}</strong></div>` : ""}
+            </div>
+            <div class="admin-order-actions">
+              <span style="font-size:0.8rem;color:var(--text-secondary);">تغيير الحالة:</span>
+              <button type="button" class="status-btn ${st === "pending" ? "active" : ""}" data-oid="${esc(o.id)}" data-setst="pending">⏳ قيد التنفيذ</button>
+              <button type="button" class="status-btn ${st === "done" ? "active" : ""}" data-oid="${esc(o.id)}" data-setst="done">✅ تم الشحن</button>
+              <button type="button" class="status-btn ${st === "cancelled" ? "active" : ""}" data-oid="${esc(o.id)}" data-setst="cancelled">❌ ملغي</button>
+            </div>
+          </div>`;
+        })
+        .join("");
+    }
+
+    document.getElementById("adminOrdersList").addEventListener("click", async (e) => {
+      const btn = e.target.closest("[data-oid][data-setst]");
+      if (!btn) return;
+      try {
+        await db.collection("orders").doc(btn.dataset.oid).update({ status: btn.dataset.setst });
+      } catch (err) {
+        alert("تعذر تحديث حالة الطلب، تأكد من تفعيل Firestore.");
+      }
+    });
+
+    // ---------- محرر الأسعار والشارات ----------
+    function getAllEditableBaseItems() {
+      return [
+        ...BASE_CATALOG.diamonds.map((x) => ({ ...x, secLabel: "💎 جواهر أكونت" })),
+        ...BASE_CATALOG.id.map((x) => ({ ...x, secLabel: "🆔 عروض ID" })),
+        ...BASE_CATALOG.special.map((x) => ({ ...x, secLabel: "👑 باقات وعضويات" })),
+      ];
+    }
+
+    function renderCatalogEditor() {
+      const items = getAllEditableBaseItems();
+      const container = document.getElementById("catalogEditorList");
+      container.innerHTML = items
+        .map((item) => {
+          const curPrice = typeof catalogDoc.prices[item.id] === "number" ? catalogDoc.prices[item.id] : item.price;
+          const curTag = typeof catalogDoc.tags[item.id] === "string" ? catalogDoc.tags[item.id] : item.tag || "";
+          const isHidden = Boolean(catalogDoc.hidden[item.id]);
+          return `
+          <div class="price-edit-row" data-pkg-row="${esc(item.id)}">
+            <div>
+              <strong style="font-size:0.92rem;">${esc(item.title)}</strong>
+              <span style="display:block;font-size:0.75rem;color:var(--text-secondary);">${esc(item.secLabel)}</span>
+            </div>
+            <div>
+              <input type="number" class="edit-price-inp" value="${curPrice}" min="1" aria-label="السعر" />
+            </div>
+            <div>
+              <input type="text" class="edit-tag-inp" value="${esc(curTag)}" placeholder="الشارة (مثال: الأكثر طلباً)" aria-label="الشارة" />
+            </div>
+            <label style="display:flex;align-items:center;gap:6px;font-size:0.8rem;cursor:pointer;white-space:nowrap;">
+              <input type="checkbox" class="edit-hide-inp" ${isHidden ? "checked" : ""} />
+              <span>إخفاء</span>
+            </label>
+          </div>`;
+        })
+        .join("");
+    }
+
+    document.getElementById("saveCatalogBtn").addEventListener("click", async () => {
+      const msg = document.getElementById("saveCatalogMsg");
+      msg.style.color = "#a5b4fc";
+      msg.textContent = "⏳ جاري حفظ التعديلات...";
+
+      const prices = {};
+      const tags = {};
+      const hidden = {};
+
+      document.querySelectorAll("[data-pkg-row]").forEach((row) => {
+        const id = row.dataset.pkgRow;
+        const pVal = Number(row.querySelector(".edit-price-inp").value);
+        const tVal = row.querySelector(".edit-tag-inp").value.trim();
+        const hVal = row.querySelector(".edit-hide-inp").checked;
+        if (!Number.isNaN(pVal) && pVal > 0) prices[id] = pVal;
+        tags[id] = tVal;
+        if (hVal) hidden[id] = true;
+      });
+
+      catalogDoc.prices = prices;
+      catalogDoc.tags = tags;
+      catalogDoc.hidden = hidden;
+
+      try {
+        await db.collection("settings").doc("catalog").set(catalogDoc, { merge: true });
+        msg.style.color = "#4ade80";
+        msg.textContent = "✅ تم حفظ الأسعار والشارات وتحديث الموقع فوراً!";
+      } catch (err) {
+        firestoreHint.style.display = "block";
+        msg.style.color = "#fbbf24";
+        msg.textContent = "⚠️ يرجى تفعيل Firestore أولاً من الرابط بالأعلى.";
+      }
+    });
+
+    // ---------- إضافة باقة جديدة ----------
+    const newSectionEl = document.getElementById("newSection");
+    const newCatWrapEl = document.getElementById("newCatWrap");
+    const newSubEl = document.getElementById("newSubtitle");
+
+    newSectionEl.addEventListener("change", () => {
+      const sec = newSectionEl.value;
+      newCatWrapEl.style.display = sec === "special" ? "flex" : "none";
+      if (sec === "diamonds") newSubEl.value = "شحن مباشر بالأكونت";
+      else if (sec === "id") newSubEl.value = "شحن مباشر بالـ ID فقط";
+      else newSubEl.value = "عرض خاص فري فاير";
+    });
+
+    document.getElementById("addPkgForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const msg = document.getElementById("addPkgMsg");
+      const section = newSectionEl.value;
+      const category = document.getElementById("newCategory").value;
+      const title = document.getElementById("newTitle").value.trim();
+      const subtitle = newSubEl.value.trim();
+      const price = Number(document.getElementById("newPrice").value);
+      const tag = document.getElementById("newTag").value.trim();
+
+      const newPkg = {
+        id: "cust-" + Date.now(),
+        section,
+        category: section === "special" ? category : "",
+        title,
+        subtitle,
+        price,
+        tag,
+      };
+
+      catalogDoc.custom = [...(catalogDoc.custom || []), newPkg];
+      try {
+        await db.collection("settings").doc("catalog").set(catalogDoc, { merge: true });
+        document.getElementById("newTitle").value = "";
+        document.getElementById("newPrice").value = "";
+        document.getElementById("newTag").value = "";
+        msg.style.color = "#4ade80";
+        msg.textContent = "✅ تمت إضافة الباقة للموقع بنجاح!";
+        renderCustomPkgs();
+      } catch (err) {
+        firestoreHint.style.display = "block";
+        msg.style.color = "#fbbf24";
+        msg.textContent = "⚠️ يرجى تفعيل Firestore أولاً من الرابط بالأعلى.";
+      }
+    });
+
+    function renderCustomPkgs() {
+      const box = document.getElementById("customPkgsList");
+      const list = catalogDoc.custom || [];
+      if (list.length === 0) {
+        box.innerHTML = `<p style="font-size:0.85rem;color:var(--text-secondary);">لا توجد باقات إضافية مخصصة حالياً.</p>`;
+        return;
+      }
+      box.innerHTML = list
+        .map(
+          (x) => `
+        <div class="price-edit-row" style="grid-template-columns:1fr auto auto;">
+          <div>
+            <strong>${esc(x.title)}</strong> — <span style="color:#5eead4;">${Number(x.price).toLocaleString("en-US")} ج.م</span>
+            <span style="display:block;font-size:0.75rem;color:var(--text-secondary);">${esc(x.subtitle)}</span>
+          </div>
+          <button type="button" class="logout-btn" data-del-cust="${esc(x.id)}">حذف الباقة</button>
+        </div>`
+        )
+        .join("");
+    }
+
+    document.getElementById("customPkgsList").addEventListener("click", async (e) => {
+      const btn = e.target.closest("[data-del-cust]");
+      if (!btn) return;
+      const id = btn.dataset.delCust;
+      catalogDoc.custom = (catalogDoc.custom || []).filter((x) => x.id !== id);
+      try {
+        await db.collection("settings").doc("catalog").set(catalogDoc, { merge: true });
+        renderCustomPkgs();
+      } catch {
+        alert("تعذر حذف الباقة.");
+      }
+    });
+  </script>
+</body>
+</html>

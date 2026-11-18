@@ -2184,3 +2184,78 @@ body {
     font-size: 0.72rem;
   }
 }
+
+/* ==========================================
+   سجل طلبات العميل داخل البروفايل
+   ========================================== */
+.profile-tabs-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 290px;
+  overflow-y: auto;
+  padding-left: 2px;
+}
+
+.orders-empty {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  padding: 24px 12px;
+}
+
+.order-item {
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(8, 10, 30, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.order-item-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 0.92rem;
+}
+
+.order-item-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.order-status {
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.st-pending {
+  background: rgba(251, 191, 36, 0.16);
+  color: #fde68a;
+  border: 1px solid rgba(251, 191, 36, 0.35);
+}
+
+.st-done {
+  background: rgba(34, 197, 94, 0.18);
+  color: #86efac;
+  border: 1px solid rgba(34, 197, 94, 0.4);
+}
+
+.st-cancelled {
+  background: rgba(239, 68, 68, 0.16);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+}

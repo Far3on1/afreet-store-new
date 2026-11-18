@@ -478,9 +478,10 @@
         <span id="profileProviderBadge" class="profile-provider-badge">حساب عفريت</span>
       </div>
 
-      <div class="auth-tabs">
-        <button type="button" class="auth-tab profile-tab active" data-profile-tab="info">البيانات الشخصية</button>
-        <button type="button" class="auth-tab profile-tab" data-profile-tab="security">تغيير كلمة المرور</button>
+      <div class="auth-tabs profile-tabs-3">
+        <button type="button" class="auth-tab profile-tab active" data-profile-tab="info">👤 بياناتي</button>
+        <button type="button" class="auth-tab profile-tab" data-profile-tab="orders">📦 طلباتي</button>
+        <button type="button" class="auth-tab profile-tab" data-profile-tab="security">🔒 كلمة المرور</button>
       </div>
 
       <!-- Profile Info Form -->
@@ -496,6 +497,11 @@
         <button type="submit" class="btn btn-primary btn-lg full-width">حفظ التعديلات</button>
         <p class="toast-msg" id="profileInfoMsg"></p>
       </form>
+
+      <!-- Profile Orders List -->
+      <div id="profileOrdersPanel" style="display:none;">
+        <div id="profileOrdersList" class="orders-list"></div>
+      </div>
 
       <!-- Profile Security / Password Form -->
       <form id="profilePasswordForm" class="order-form" style="display:none;">
@@ -526,6 +532,8 @@
 
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+  <script src="catalog-data.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
