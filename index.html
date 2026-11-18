@@ -379,30 +379,43 @@
 
   <!-- Auth Modal (Login / Register) -->
   <div class="modal-backdrop" id="authModal" aria-hidden="true">
-    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="authModalTitle">
+    <div class="modal-box auth-modal-box" role="dialog" aria-modal="true" aria-labelledby="authModalTitle">
       <button class="modal-close" id="closeAuthModal" aria-label="إغلاق">✕</button>
-      <div class="modal-header">
-        <span class="modal-badge">حساب عفريت</span>
-        <h3 id="authModalTitle">تسجيل الدخول للمتابعة</h3>
+      <div class="modal-header auth-header-esports">
+        <span class="modal-badge auth-badge-cyan">🛡️ حماية وأمان 100%</span>
+        <div class="auth-hero-row">
+          <div class="auth-emblem-box">🎮</div>
+          <div>
+            <h3 id="authModalTitle">جاهز للشحن؟ سجل دخولك</h3>
+            <p class="auth-sub">خطوة واحدة وتبدأ تطلب باقتك فوراً</p>
+          </div>
+        </div>
         <p class="auth-notice" id="authNotice" style="display:none;">🔒 يجب تسجيل الدخول أولاً لتتمكن من إرسال طلب الشحن</p>
       </div>
 
-      <div class="auth-tabs">
-        <button type="button" class="auth-tab active" data-auth-tab="login">تسجيل الدخول</button>
-        <button type="button" class="auth-tab" data-auth-tab="register">إنشاء حساب جديد</button>
+      <div class="auth-tabs auth-tabs-cyan">
+        <button type="button" class="auth-tab active" data-auth-tab="login">🔑 تسجيل الدخول</button>
+        <button type="button" class="auth-tab" data-auth-tab="register">✨ حساب جديد</button>
       </div>
 
       <!-- Login Form -->
       <form id="loginForm" class="order-form">
         <div class="form-group">
-          <label for="loginIdentifier">الإيميل (Email)</label>
-          <input type="email" id="loginIdentifier" required placeholder="example@gmail.com" />
+          <label for="loginIdentifier">الإيميل</label>
+          <div class="input-icon-wrap">
+            <span class="input-emoji">📧</span>
+            <input type="email" id="loginIdentifier" required placeholder="example@gmail.com" dir="ltr" />
+          </div>
         </div>
         <div class="form-group">
           <label for="loginPassword">كلمة المرور</label>
-          <input type="password" id="loginPassword" required placeholder="••••••••" />
+          <div class="input-icon-wrap">
+            <span class="input-emoji">🔒</span>
+            <input type="password" id="loginPassword" required placeholder="••••••••" dir="ltr" />
+            <button type="button" class="toggle-pass-btn" data-target="loginPassword" aria-label="إظهار كلمة المرور">👁️</button>
+          </div>
         </div>
-        <button type="submit" class="btn btn-primary btn-lg full-width">دخول</button>
+        <button type="submit" class="btn btn-cyan btn-lg full-width">🎮 يلا نبدأ</button>
         <p class="auth-error" id="loginError"></p>
       </form>
 
@@ -410,21 +423,34 @@
       <form id="registerForm" class="order-form" style="display:none;">
         <div class="form-group">
           <label for="regName">الاسم</label>
-          <input type="text" id="regName" required placeholder="أدخل اسمك..." />
+          <div class="input-icon-wrap">
+            <span class="input-emoji">👤</span>
+            <input type="text" id="regName" required placeholder="أدخل اسمك..." />
+          </div>
         </div>
         <div class="form-group">
-          <label for="regEmail">الإيميل (Email)</label>
-          <input type="email" id="regEmail" required placeholder="example@gmail.com" />
+          <label for="regEmail">الإيميل</label>
+          <div class="input-icon-wrap">
+            <span class="input-emoji">📧</span>
+            <input type="email" id="regEmail" required placeholder="example@gmail.com" dir="ltr" />
+          </div>
         </div>
         <div class="form-group">
           <label for="regPhone">رقم الموبايل (واتساب)</label>
-          <input type="tel" id="regPhone" required placeholder="01xxxxxxxxx" />
+          <div class="input-icon-wrap">
+            <span class="input-emoji">📱</span>
+            <input type="tel" id="regPhone" required placeholder="01xxxxxxxxx" dir="ltr" />
+          </div>
         </div>
         <div class="form-group">
           <label for="regPassword">كلمة المرور</label>
-          <input type="password" id="regPassword" required minlength="4" placeholder="4 أحرف أو أرقام على الأقل" />
+          <div class="input-icon-wrap">
+            <span class="input-emoji">🔒</span>
+            <input type="password" id="regPassword" required minlength="6" placeholder="6 أحرف أو أرقام على الأقل" dir="ltr" />
+            <button type="button" class="toggle-pass-btn" data-target="regPassword" aria-label="إظهار كلمة المرور">👁️</button>
+          </div>
         </div>
-        <button type="submit" class="btn btn-primary btn-lg full-width">إنشاء حساب</button>
+        <button type="submit" class="btn btn-cyan btn-lg full-width">⚡ سجل حسابك</button>
         <p class="auth-error" id="registerError"></p>
       </form>
     </div>

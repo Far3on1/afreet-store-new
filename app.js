@@ -366,6 +366,14 @@ authModal.addEventListener("click", (e) => {
   if (e.target === authModal) closeAuthModal();
 });
 
+document.querySelectorAll(".toggle-pass-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const input = document.getElementById(btn.dataset.target);
+    if (!input) return;
+    input.type = input.type === "password" ? "text" : "password";
+  });
+});
+
 // Email Sign-In
 loginForm.addEventListener("submit", async (e) => {
   e.preventDefault();
