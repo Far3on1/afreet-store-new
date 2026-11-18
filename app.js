@@ -14,7 +14,7 @@ const STORE_CONFIG = {
 // ==========================================
 const DIAMOND_PACKAGES = [
   { id: "ff-100", title: "100 جوهرة", subtitle: "شحن مباشر بالأكونت", price: 50, icon: "💎", tag: "بداية سريعة" },
-  { id: "ff-200", title: "200 جوهرة", subtitle: "شحن مباشر بالأكونت", price: 100, icon: "💎", tag: "" },
+  { id: "ff-200", title: "200 جوهرة", subtitle: "شحن مباشر بالأكونت", price: 100, icon: "💎", tag: "اختيار ذكي" },
   { id: "ff-300", title: "300 جوهرة", subtitle: "شحن مباشر بالأكونت", price: 140, icon: "💎", tag: "توفير" },
   { id: "ff-520", title: "520 جوهرة", subtitle: "شحن مباشر بالأكونت", price: 210, icon: "💎", tag: "الأكثر طلباً", popular: true },
   { id: "ff-1060", title: "1060 جوهرة", subtitle: "شحن مباشر بالأكونت", price: 370, icon: "💎", tag: "عرض مميز", popular: true },
