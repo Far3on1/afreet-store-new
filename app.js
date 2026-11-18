@@ -804,8 +804,10 @@ copyOrderBtn.addEventListener("click", async () => {
 
 const navBackdrop = document.getElementById("navBackdrop");
 const closeDrawerBtn = document.getElementById("closeDrawerBtn");
+let lastDrawerClose = 0;
 
 function openMobileDrawer() {
+  if (Date.now() - lastDrawerClose < 350) return;
   navLinks.classList.add("open");
   navBackdrop.classList.add("open");
   document.documentElement.classList.add("drawer-open");
@@ -813,6 +815,7 @@ function openMobileDrawer() {
 }
 
 function closeMobileDrawer() {
+  lastDrawerClose = Date.now();
   navLinks.classList.remove("open");
   navBackdrop.classList.remove("open");
   document.documentElement.classList.remove("drawer-open");
@@ -828,17 +831,16 @@ mobileToggle.addEventListener("click", (e) => {
   }
 });
 
-["pointerdown", "click"].forEach((evt) => {
-  navBackdrop.addEventListener(evt, (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    closeMobileDrawer();
-  });
-  closeDrawerBtn.addEventListener(evt, (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    closeMobileDrawer();
-  });
+navBackdrop.addEventListener("click", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  closeMobileDrawer();
+});
+
+closeDrawerBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  closeMobileDrawer();
 });
 
 navBackdrop.addEventListener(
