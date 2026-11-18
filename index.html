@@ -327,7 +327,7 @@
 
       <div class="selected-summary">
         <div>
-          <span class="summary-label">الباقة المختارة:</span>
+          <span class="summary-label">الشحنات المختارة والإجمالي:</span>
           <strong id="modalItemName">—</strong>
         </div>
         <div class="summary-price" id="modalItemPrice">—</div>
@@ -335,15 +335,16 @@
 
       <form id="orderForm" class="order-form">
         <div class="form-group">
-          <label>تغيير الباقة (اختياري)</label>
+          <label>➕ إضافة شحنة إضافية مع طلبك (اختياري)</label>
           <select id="packageSelect" hidden></select>
           <div class="custom-pkg-dd" id="customPkgDd">
             <button type="button" class="pkg-dd-trigger" id="pkgDdTrigger">
-              <span id="pkgDdLabel">اختر الباقة...</span>
+              <span id="pkgDdLabel">➕ اختر شحنة إضافية لإضافتها...</span>
               <span class="pkg-dd-arrow">▼</span>
             </button>
             <div class="pkg-dd-menu" id="pkgDdMenu"></div>
           </div>
+          <div id="extraItemsList" class="extra-items-list"></div>
         </div>
 
         <div class="form-group">

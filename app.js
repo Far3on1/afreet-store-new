@@ -655,6 +655,18 @@ profilePasswordForm.addEventListener("submit", async (e) => {
   }
 });
 
+let primaryOrderItem = null;
+let extraOrderItems = [];
+
+function getCombinedOrder() {
+  const base = primaryOrderItem || ALL_ITEMS.find((i) => i.id === packageSelect.value) || ALL_ITEMS[0];
+  const all = [base, ...extraOrderItems].filter(Boolean);
+  const total = all.reduce((sum, x) => sum + (Number(x.price) || 0), 0);
+  const titleText = all.map((x) => x.title).join(" + ");
+  const displayTitle = all.map((x) => `${x.icon} ${x.title}`).join(" + ");
+  return { base, all, total, titleText, displayTitle };
+}
+
 // Open Order Modal (Protected by Firebase Login)
 function openOrderModal(itemId) {
   if (!currentUser) {
@@ -663,6 +675,8 @@ function openOrderModal(itemId) {
     return;
   }
   const selected = ALL_ITEMS.find((i) => i.id === itemId) || ALL_ITEMS[0];
+  primaryOrderItem = selected;
+  extraOrderItems = [];
   packageSelect.value = selected.id;
   updateModalSummary(selected);
   toastMsg.textContent = "";
@@ -671,17 +685,38 @@ function openOrderModal(itemId) {
   syncModalScrollLock();
 }
 
+function renderExtraItemsChips() {
+  const box = document.getElementById("extraItemsList");
+  if (!box) return;
+  if (extraOrderItems.length === 0) {
+    box.innerHTML = "";
+    return;
+  }
+  box.innerHTML = extraOrderItems
+    .map(
+      (x, idx) => `
+      <div class="extra-item-chip">
+        <span>➕ ${esc(x.icon)} ${esc(x.title)} (<strong style="color:#5eead4;">${formatPrice(x.price)} ج.م</strong>)</span>
+        <button type="button" class="extra-item-remove" data-rm-extra="${idx}" title="حذف الشحنة الإضافية">✕</button>
+      </div>`
+    )
+    .join("");
+}
+
 function updateModalSummary(item) {
-  modalItemName.textContent = `${item.icon} ${item.title}`;
-  modalItemPrice.textContent = `${formatPrice(item.price)} ج.م`;
-  modalCategory.textContent = item.subtitle;
+  if (item) primaryOrderItem = item;
+  const comb = getCombinedOrder();
+  modalItemName.textContent = comb.displayTitle;
+  modalItemPrice.textContent = `${formatPrice(comb.total)} ج.م`;
+  modalCategory.textContent = comb.base.subtitle;
   const pkgDdLabel = document.getElementById("pkgDdLabel");
   if (pkgDdLabel) {
-    pkgDdLabel.textContent = `${item.icon} ${item.title} — ${formatPrice(item.price)} ج.م`;
+    pkgDdLabel.textContent =
+      extraOrderItems.length > 0
+        ? `➕ تمت إضافة (${extraOrderItems.length}) شحنة — أضف المزيد...`
+        : "➕ اختر شحنة إضافية لإضافتها مع طلبك...";
   }
-  document.querySelectorAll(".pkg-dd-item").forEach((el) => {
-    el.classList.toggle("active", el.dataset.pkgPick === item.id);
-  });
+  renderExtraItemsChips();
 }
 
 function closeOrderModal() {
@@ -693,7 +728,7 @@ function closeOrderModal() {
 }
 
 function buildOrderMessage(orderCode = "") {
-  const selected = ALL_ITEMS.find((i) => i.id === packageSelect.value) || ALL_ITEMS[0];
+  const comb = getCombinedOrder();
   const account = document.getElementById("playerAccount").value.trim() || "غير محدد";
   const payment = document.getElementById("paymentMethod").value;
   const notes = document.getElementById("orderNotes").value.trim();
@@ -705,8 +740,8 @@ function buildOrderMessage(orderCode = "") {
     msg += `👤 العميل: ${currentUser.name} (${contact})\n`;
   }
   msg += `🎮 اللعبة: فري فاير (Free Fire)\n`;
-  msg += `📦 الباقة: ${selected.title}\n`;
-  msg += `💰 السعر: ${formatPrice(selected.price)} ج.م\n`;
+  msg += `📦 الباقات: ${comb.titleText}\n`;
+  msg += `💰 الإجمالي: ${formatPrice(comb.total)} ج.م\n`;
   msg += `🆔 بيانات الحساب / ID: ${account}\n`;
   msg += `💳 وسيلة الدفع: ${payment}`;
   if (notes) msg += `\n📝 ملاحظات: ${notes}`;
@@ -767,10 +802,23 @@ if (pkgDdMenu && customPkgDd) {
     if (!btn) return;
     const item = ALL_ITEMS.find((i) => i.id === btn.dataset.pkgPick);
     if (item) {
-      packageSelect.value = item.id;
-      updateModalSummary(item);
+      extraOrderItems.push(item);
+      updateModalSummary();
     }
     customPkgDd.classList.remove("open");
+  });
+}
+
+const extraItemsListEl = document.getElementById("extraItemsList");
+if (extraItemsListEl) {
+  extraItemsListEl.addEventListener("click", (e) => {
+    const rmBtn = e.target.closest("[data-rm-extra]");
+    if (!rmBtn) return;
+    const idx = Number(rmBtn.dataset.rmExtra);
+    if (!Number.isNaN(idx)) {
+      extraOrderItems.splice(idx, 1);
+      updateModalSummary();
+    }
   });
 }
 
@@ -793,7 +841,7 @@ orderForm.addEventListener("submit", async (e) => {
   }
 
   const submitBtn = orderForm.querySelector('button[type="submit"]');
-  const selected = ALL_ITEMS.find((i) => i.id === packageSelect.value) || ALL_ITEMS[0];
+  const comb = getCombinedOrder();
   const account = document.getElementById("playerAccount").value.trim();
   const payment = document.getElementById("paymentMethod").value;
   const notes = document.getElementById("orderNotes").value.trim();
@@ -815,9 +863,9 @@ orderForm.addEventListener("submit", async (e) => {
       userName: currentUser.name,
       userEmail: currentUser.email || "",
       userPhone: currentUser.phone || "",
-      itemId: selected.id,
-      title: selected.title,
-      price: selected.price,
+      itemId: comb.all.map((x) => x.id).join("+"),
+      title: comb.titleText,
+      price: comb.total,
       playerAccount: account,
       paymentMethod: payment,
       notes,
