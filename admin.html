@@ -656,12 +656,42 @@
               <div>👤 الاسم: <strong>${esc(u.name || "—")}</strong></div>
               <div>📧 الإيميل: <strong dir="ltr">${esc(u.email || "—")}</strong></div>
               <div>📱 الموبايل: <strong dir="ltr">${esc(u.phone || "—")}</strong></div>
-              <div>🔑 الباسورد: <strong dir="ltr" style="color:#5eead4;">${esc(u.password || "يظهر عند أول دخول للعميل")}</strong></div>
+              <div>🔑 الباسورد: <strong dir="ltr" style="color:#5eead4;">${esc(u.password || "سجل قبل التحديث — يظهر فور دخوله")}</strong></div>
+            </div>
+            <div class="admin-order-actions">
+              ${u.email ? `<button type="button" class="status-btn" data-reset-email="${esc(u.email)}">📩 إرسال رابط تغيير الباسورد لإيميله</button>` : ""}
+              ${u.id ? `<button type="button" class="status-btn" data-set-pass-uid="${esc(u.id)}" data-cur-pass="${esc(u.password || "")}">✏️ تسجيل باسورد هذا الحساب في الداتا</button>` : ""}
             </div>
           </div>`
           )
           .join("");
     }
+
+    document.getElementById("adminUsersList").addEventListener("click", async (e) => {
+      const resetBtn = e.target.closest("[data-reset-email]");
+      if (resetBtn) {
+        const email = resetBtn.dataset.resetEmail;
+        try {
+          await auth.sendPasswordResetEmail(email);
+          resetBtn.textContent = "✅ تم إرسال رابط تغيير الباسورد لإيميله!";
+        } catch {
+          alert("تعذر إرسال الإيميل، تأكد من صحة عنوان البريد.");
+        }
+        return;
+      }
+
+      const setBtn = e.target.closest("[data-set-pass-uid]");
+      if (setBtn) {
+        const uid = setBtn.dataset.setPassUid;
+        const val = prompt("اكتب باسورد هذا الحساب لحفظه في الداتا:", setBtn.dataset.curPass || "");
+        if (val === null) return;
+        try {
+          await db.collection("users").doc(uid).set({ password: val.trim() }, { merge: true });
+        } catch {
+          alert("تعذر حفظ الباسورد، تأكد من تحديث Rules في Firebase.");
+        }
+      }
+    });
 
     function updateOrderStats() {
       document.getElementById("statTotal").textContent = allOrders.length;
