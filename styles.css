@@ -1569,26 +1569,25 @@ body.modal-open {
     font-size: 0.7rem;
   }
 
+  .navbar {
+    z-index: 250;
+    background: rgba(15, 20, 48, 0.96);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
   html.drawer-open,
   body.drawer-open {
     overflow: hidden;
-    height: 100%;
-    touch-action: none;
-  }
-
-  body.drawer-open .navbar {
-    z-index: 250;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
   }
 
   .nav-backdrop {
     display: none;
     position: fixed;
     inset: 0;
-    background: transparent;
-    touch-action: none;
+    background: rgba(5, 8, 22, 0.35);
     z-index: 240;
+    touch-action: manipulation;
   }
 
   .nav-backdrop.open {
@@ -1603,8 +1602,8 @@ body.modal-open {
     right: auto;
     bottom: 0;
     width: min(290px, 82vw);
-    height: 100vh;
-    z-index: 250;
+    height: 100dvh;
+    z-index: 260;
     flex-direction: column;
     align-items: stretch;
     gap: 10px;
@@ -1612,14 +1611,17 @@ body.modal-open {
     padding: 20px 18px;
     border-right: 1px solid rgba(129, 140, 248, 0.35);
     box-shadow: 12px 0 40px rgba(0, 0, 0, 0.75);
-    transform: translateX(-100%);
-    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    transform: translate3d(-105%, 0, 0);
+    transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
     overflow-y: auto;
     overscroll-behavior: contain;
+    pointer-events: none;
   }
 
   .nav-links.open {
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
+    pointer-events: auto;
   }
 
   .drawer-header {
@@ -2052,8 +2054,38 @@ body {
   border-top: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-.nav-links {
-  background: linear-gradient(180deg, #1e1b4b 0%, #0f172a 100%);
+@media (max-width: 720px) {
+  body {
+    background-attachment: scroll;
+  }
+
+  .navbar,
+  .price-card,
+  .game-card,
+  .step-card,
+  .support-card,
+  .hero-stats,
+  .search-box,
+  .hero-card-showcase,
+  .user-pill,
+  .salat-fab {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .navbar {
+    background: rgba(15, 20, 48, 0.96);
+  }
+
+  .price-card,
+  .game-card,
+  .step-card,
+  .support-card,
+  .hero-stats,
+  .search-box,
+  .hero-card-showcase {
+    background: rgba(24, 28, 66, 0.88);
+  }
 }
 
 .hero-stats .stat-value,

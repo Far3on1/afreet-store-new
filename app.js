@@ -828,18 +828,26 @@ mobileToggle.addEventListener("click", (e) => {
   }
 });
 
-navBackdrop.addEventListener("click", closeMobileDrawer);
-closeDrawerBtn.addEventListener("click", closeMobileDrawer);
-
-document.addEventListener("click", (e) => {
-  if (
-    navLinks.classList.contains("open") &&
-    !navLinks.contains(e.target) &&
-    !mobileToggle.contains(e.target)
-  ) {
+["pointerdown", "click"].forEach((evt) => {
+  navBackdrop.addEventListener(evt, (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     closeMobileDrawer();
-  }
+  });
+  closeDrawerBtn.addEventListener(evt, (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    closeMobileDrawer();
+  });
 });
+
+navBackdrop.addEventListener(
+  "touchmove",
+  (e) => {
+    e.preventDefault();
+  },
+  { passive: false }
+);
 
 document.querySelectorAll(".nav-link").forEach((link) => {
   link.addEventListener("click", closeMobileDrawer);
